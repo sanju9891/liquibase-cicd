@@ -1,0 +1,73 @@
+<project ...>
+    ...
+    <properties>
+        <java.version>11</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <sonar.organization>your-sonar-org</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    </properties>
+
+    <dependencies>
+        <!-- Add your database driver, e.g., PostgreSQL -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.3.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>4.9.1</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>4.9.1</version>
+                <configuration>
+                    <changeLogFile>src/main/resources/db/changelog/db.changelog-master.xml</changeLogFile>
+                    <!-- These properties will be overridden by profiles -->
+                    <url>${liquibase.url}</url>
+                    <username>${liquibase.username}</username>
+                    <password>${liquibase.password}</password>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.9.1.2184</version>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <liquibase.url>${env.LIQUIBASE_URL}</liquibase.url>
+                <liquibase.username>${env.LIQUIBASE_USERNAME}</liquibase.username>
+                <liquibase.password>${env.LIQUIBASE_PASSWORD}</liquibase.password>
+            </properties>
+        </profile>
+        <profile>
+            <id>staging</id>
+            <properties>
+                <liquibase.url>${env.LIQUIBASE_URL}</liquibase.url>
+                <liquibase.username>${env.LIQUIBASE_USERNAME}</liquibase.username>
+                <liquibase.password>${env.LIQUIBASE_PASSWORD}</liquibase.password>
+            </properties>
+        </profile>
+        <profile>
+            <id>production</id>
+            <properties>
+                <liquibase.url>${env.LIQUIBASE_URL}</liquibase.url>
+                <liquibase.username>${env.LIQUIBASE_USERNAME}</liquibase.username>
+                <liquibase.password>${env.LIQUIBASE_PASSWORD}</liquibase.password>
+            </properties>
+        </profile>
+    </profiles>
+</project>
