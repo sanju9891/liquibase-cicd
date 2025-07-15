@@ -32,32 +32,32 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
  
-      # - name: Install Liquibase
-      #   run: |
-      #     curl -L https://github.com/liquibase/liquibase/releases/download/v${LIQUIBASE_VERSION}/liquibase-${LIQUIBASE_VERSION}.tar.gz | tar xz
-      #     sudo mv liquibase /usr/local/bin/liquibase
+      - name: Install Liquibase
+        run: |
+          curl -L https://github.com/liquibase/liquibase/releases/download/v${LIQUIBASE_VERSION}/liquibase-${LIQUIBASE_VERSION}.tar.gz | tar xz
+          sudo mv liquibase /usr/local/bin/liquibase
 
       - name: Run Liquibase Validate
+        run: |
+          liquibase && \
+            --defaultsFile=liquibase/${ENV}/liquibase.properties && \
+            --changeLogFile=liquibase/changelog.xml && \
+            --logLevel=info \
+          validate        
+ 
+      - name: Dry Run SQL
         run: |
           liquibase \
             --defaultsFile=liquibase/${ENV}/liquibase.properties \
             --changeLogFile=liquibase/changelog.xml \
             --logLevel=info \
-          validate        
- 
-      # - name: Dry Run SQL
-      #   run: |
-      #     liquibase \
-      #       --defaultsFile=liquibase/${ENV}/liquibase.properties \
-      #       --changeLogFile=liquibase/changelog.xml \
-      #       --logLevel=info \
-      #     updateSQL              
+          updateSQL              
           
-      # - name: Update Database
-      #   run: |
-      #     liquibase \
-      #       --defaultsFile=liquibase/${ENV}/liquibase.properties \
-      #       --changeLogFile=liquibase/changelog.xml \
-      #       --logLevel=info \
-      #     update  
+      - name: Update Database
+        run: |
+          liquibase \
+            --defaultsFile=liquibase/${ENV}/liquibase.properties \
+            --changeLogFile=liquibase/changelog.xml \
+            --logLevel=info \
+          update  
  
