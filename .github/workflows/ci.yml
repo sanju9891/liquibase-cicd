@@ -1,0 +1,51 @@
+
+name: Liquibase Multi-Env CI
+ 
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target Environment'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - sit
+          - uat
+ 
+jobs:
+  liquibase-deploy:
+    runs-on: ubuntu-latest
+ 
+    env:
+      LIQUIBASE_VERSION: 4.24.0
+      ENV: ${{ github.event.inputs.environment }}
+ 
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+ 
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+ 
+      - name: Install Liquibase
+        run: |
+          curl -L https://github.com/liquibase/liquibase/releases/download/v${LIQUIBASE_VERSION}/liquibase-${LIQUIBASE_VERSION}.tar.gz | tar xz
+          sudo mv liquibase /usr/local/bin/liquibase
+ 
+      - name: Run Liquibase Validate
+        run: |
+          liquibase --defaultsFile=liquibase/${ENV}/liquibase.properties validate
+ 
+      - name: Dry Run SQL
+        run: |
+          liquibase --defaultsFile=liquibase/${ENV}/liquibase.properties updateSQL
+ 
+      - name: Update Database
+        run: |
+          liquibase --defaultsFile=liquibase/${ENV}/liquibase.properties update
+ 
