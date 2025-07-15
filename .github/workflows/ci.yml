@@ -16,7 +16,7 @@ on:
  
 jobs:
   liquibase-deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
  
     env:
       LIQUIBASE_VERSION: 4.24.0
@@ -36,16 +36,28 @@ jobs:
         run: |
           curl -L https://github.com/liquibase/liquibase/releases/download/v${LIQUIBASE_VERSION}/liquibase-${LIQUIBASE_VERSION}.tar.gz | tar xz
           sudo mv liquibase /usr/local/bin/liquibase
- 
+
       - name: Run Liquibase Validate
         run: |
-          liquibase --defaultsFile=liquibase/${ENV}/liquibase.properties validate
+          liquibase \
+            --defaultsFile=liquibase/${ENV}/liquibase.properties \
+            --changeLogFile=liquibase/changelog.xml \
+            --logLevel=info \
+          validate        
  
       - name: Dry Run SQL
         run: |
-          liquibase --defaultsFile=liquibase/${ENV}/liquibase.properties updateSQL
- 
+          liquibase \
+            --defaultsFile=liquibase/${ENV}/liquibase.properties \
+            --changeLogFile=liquibase/changelog.xml \
+            --logLevel=info \
+          updateSQL              
+          
       - name: Update Database
         run: |
-          liquibase --defaultsFile=liquibase/${ENV}/liquibase.properties update
+          liquibase \
+            --defaultsFile=liquibase/${ENV}/liquibase.properties \
+            --changeLogFile=liquibase/changelog.xml \
+            --logLevel=info \
+          update  
  

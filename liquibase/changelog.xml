@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <!-- ChangeSet 1: Create a table -->
+    <changeSet id="1" author="sanjay.khatri">
+        <createTable tableName="employee">
+            <column name="id" type="INT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(100)"/>
+            <column name="email" type="VARCHAR(150)"/>
+            <column name="created_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+    <!-- ChangeSet 2: Add a new column -->
+    <changeSet id="2" author="sanjay.khatri">
+        <addColumn tableName="employee">
+            <column name="department" type="VARCHAR(100)"/>
+        </addColumn>
+    </changeSet>
+
+    <!-- ChangeSet 3: Create an index -->
+    <changeSet id="3" author="sanjay.khatri">
+        <createIndex indexName="idx_employee_email" tableName="employee">
+            <column name="email"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>
