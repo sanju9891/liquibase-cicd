@@ -31,11 +31,27 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+
+      - name: Install unzip (required for Liquibase)
+        run: sudo apt-get update && sudo apt-get install -y unzip
  
       - name: Install Liquibase
         run: |
-          curl -L https://github.com/liquibase/liquibase/releases/download/v${LIQUIBASE_VERSION}/liquibase-${LIQUIBASE_VERSION}.tar.gz | tar xz
+          curl -sL https://github.com/liquibase/liquibase/releases/download/v${LIQUIBASE_VERSION}/liquibase-${LIQUIBASE_VERSION}.tar.gz 
+          unzip -o liquibase.zip -d liquibase
+          chmod +x liquibase/liquibase
+          echo "${GITHUB_WORKSPACE}/liquibase" >> $GITHUB_PATH
           sudo mv liquibase /usr/local/bin/liquibase
+
+      # - name: Download and Install Liquibase
+      #   run: |
+      #     curl -sL https://github.com/liquibase/liquibase/releases/latest/download/liquibase.zip -o liquibase.zip
+      #     unzip -o liquibase.zip -d liquibase
+      #     chmod +x liquibase/liquibase
+      #     echo "${GITHUB_WORKSPACE}/liquibase" >> $GITHUB_PATH
+
+      - name: Verify Liquibase Installation
+        run: liquibase/liquibase --version
 
       - name: Run Liquibase Validate
         run: |
