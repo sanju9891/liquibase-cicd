@@ -88,7 +88,7 @@ on:
  
 jobs:
   liquibase-ci:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
  
     env:
       LIQUIBASE_VERSION: 4.24.0
