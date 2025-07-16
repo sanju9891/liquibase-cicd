@@ -92,7 +92,7 @@ jobs:
  
     env:
       LIQUIBASE_VERSION: 4.24.0
-      DB_URL: ${{ DB_URL }}
+      DB_URL: jdbc:mysql://34.227.26.61:3306/testDB
       DB_USERNAME: ${{ secrets.DB_USERNAME }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       CHANGELOG_FILE: changelog.xml
