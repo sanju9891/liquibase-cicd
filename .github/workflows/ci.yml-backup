@@ -36,14 +36,9 @@ jobs:
         run: |
           curl -Lo liquibase.zip https://github.com/liquibase/liquibase/releases/latest/download/liquibase-4.10.0.zip
           echo "Liquibase installed successfully."
-      
-      - name: List files
-        run: ls -lah
-
-      - name: Unzip Liquibase
-        run: unzip liquibase.zip -d liquibase
-
-  
+          ls -lah
+          unzip liquibase.zip -d liquibase
+       
       # - name: Checkout Code
       #   uses: actions/checkout@v4
  
