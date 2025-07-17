@@ -93,33 +93,33 @@ jobs:
       #     update  
  
 
-name: Liquibase CI Pipeline
+# name: Liquibase CI Pipeline
  
-on:
-  push:
-    branches: [main]
-  pull_request:
-    #branches: [main]
+# on:
+#   push:
+#     branches: [main]
+#   pull_request:
+#     #branches: [main]
  
-jobs:
-  liquibase-ci:
-    runs-on: self-hosted
+# jobs:
+#   liquibase-ci:
+#     runs-on: self-hosted
       
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v2
+#       steps:
+#         - name: Checkout code
+#           uses: actions/checkout@v2
 
-        - name: Set up JDK
-          uses: actions/setup-java@v2
-          with:
-            java-version: '11'  # Specify the Java version
-            distribution: 'adopt'
+#         - name: Set up JDK
+#           uses: actions/setup-java@v2
+#           with:
+#             java-version: '11'  # Specify the Java version
+#             distribution: 'adopt'
 
-        - name: Install Liquibase
-          run: |
-            curl -Lo liquibase.zip https://github.com/liquibase/liquibase/releases/latest/download/liquibase-4.10.0.zip
-            unzip liquibase.zip -d liquibase
-            echo "Liquibase installed successfully."
+#         - name: Install Liquibase
+#           run: |
+#             curl -Lo liquibase.zip https://github.com/liquibase/liquibase/releases/latest/download/liquibase-4.10.0.zip
+#             unzip liquibase.zip -d liquibase
+#             echo "Liquibase installed successfully."
   
     # env:
     #   LIQUIBASE_VERSION: 4.24.0
