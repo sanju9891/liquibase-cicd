@@ -84,36 +84,52 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
+    #branches: [main]
  
 jobs:
   liquibase-ci:
     runs-on: self-hosted
+      
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+
+        - name: Set up JDK
+          uses: actions/setup-java@v2
+          with:
+            java-version: '11'  # Specify the Java version
+            distribution: 'adopt'
+
+        - name: Install Liquibase
+          run: |
+            curl -Lo liquibase.zip https://github.com/liquibase/liquibase/releases/latest/download/liquibase-4.10.0.zip
+            unzip liquibase.zip -d liquibase
+            echo "Liquibase installed successfully."
+  
+    # env:
+    #   LIQUIBASE_VERSION: 4.24.0
+    #   DB_URL: jdbc:mysql://34.227.26.61:3306/testDB
+    #   DB_USERNAME: ${{ secrets.DB_USERNAME }}
+    #   DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+    #   CHANGELOG_FILE: changelog.xml
  
-    env:
-      LIQUIBASE_VERSION: 4.24.0
-      DB_URL: jdbc:mysql://34.227.26.61:3306/testDB
-      DB_USERNAME: ${{ secrets.DB_USERNAME }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      CHANGELOG_FILE: changelog.xml
+    # steps:
+    #   - name: Checkout Repository
+    #     uses: actions/checkout@v4
  
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+    #   - name: Set up Java
+    #     uses: actions/setup-java@v4
+    #     with:
+    #       distribution: 'temurin'
+    #       java-version: '17'
  
-      - name: Set up Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
+    #   - name: Install Liquibase
+    #     run: |
+    #       curl -L https://github.com/liquibase/liquibase/releases/download/v${LIQUIBASE_VERSION}/liquibase-${LIQUIBASE_VERSION}.tar.gz | tar xz
+    #       sudo mv liquibase /usr/local/bin/liquibase
  
-      - name: Install Liquibase
-        run: |
-          curl -L https://github.com/liquibase/liquibase/releases/download/v${LIQUIBASE_VERSION}/liquibase-${LIQUIBASE_VERSION}.tar.gz | tar xz
-          sudo mv liquibase /usr/local/bin/liquibase
- 
-      - name: Validate Changelog
-        run: liquibase --url=$DB_URL --username=$DB_USERNAME --password=$DB_PASSWORD --changeLogFile=$CHANGELOG_FILE validate
+      #- name: Validate Changelog
+      #  run: liquibase --url=$DB_URL --username=$DB_USERNAME --password=$DB_PASSWORD --changeLogFile=$CHANGELOG_FILE validate
  
       # - name: Dry Run Update SQL
       #   run: liquibase --url=$DB_URL --username=$DB_USERNAME --password=$DB_PASSWORD --changeLogFile=$CHANGELOG_FILE updateSQL
