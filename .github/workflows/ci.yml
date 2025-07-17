@@ -1,36 +1,51 @@
 
-# name: Liquibase Multi-Env CI
+name: Liquibase Multi-Env CI
  
-# on:
-#   workflow_dispatch:
-#     inputs:
-#       environment:
-#         description: 'Target Environment'
-#         required: true
-#         default: 'dev'
-#         type: choice
-#         options:
-#           - dev
-#           - sit
-#           - uat
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target Environment'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - sit
+          - uat
  
-# jobs:
-#   liquibase-deploy:
-#     runs-on: self-hosted
+jobs:
+  liquibase-deploy:
+    runs-on: self-hosted
  
-    # env:
-    #   LIQUIBASE_VERSION: 4.24.0
-    #   ENV: ${{ github.event.inputs.environment }}
+    env:
+      LIQUIBASE_VERSION: 4.24.0
+      ENV: ${{ github.event.inputs.environment }}
  
-    # steps:
-    #   - name: Checkout Code
-    #     uses: actions/checkout@v4
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'  # Specify the Java version
+          distribution: 'adopt'
+
+      - name: Install Liquibase
+        run: |
+          curl -Lo liquibase.zip https://github.com/liquibase/liquibase/releases/latest/download/liquibase-4.10.0.zip
+          unzip liquibase.zip -d liquibase
+          echo "Liquibase installed successfully."
+  
+      # - name: Checkout Code
+      #   uses: actions/checkout@v4
  
-    #   - name: Set up Java
-    #     uses: actions/setup-java@v4
-    #     with:
-    #       distribution: 'temurin'
-    #       java-version: '17'
+      # - name: Set up Java
+      #   uses: actions/setup-java@v4
+      #   with:
+      #     distribution: 'temurin'
+      #     java-version: '17'
 
       # - name: Install unzip (required for Liquibase)
       #   run: sudo apt-get update && sudo apt-get install -y unzip
