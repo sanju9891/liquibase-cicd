@@ -32,26 +32,26 @@ jobs:
           sudo mv liquibase /usr/local/bin/
           liquibase --version # Verify installation
 
-      # Step 4: Set up environment variables for database connection
-      - name: Set up environment variables
-        env:
-          LIQUIBASE_URL: ${{ secrets.DB_URL }} # Database URL
-          LIQUIBASE_USERNAME: ${{ secrets.DB_USERNAME }} # Database username
-          LIQUIBASE_PASSWORD: ${{ secrets.DB_PASSWORD }} # Database password
-        run: echo "Environment variables set."
+    #   # Step 4: Set up environment variables for database connection
+    #   - name: Set up environment variables
+    #     env:
+    #       LIQUIBASE_URL: ${{ secrets.DB_URL }} # Database URL
+    #       LIQUIBASE_USERNAME: ${{ secrets.DB_USERNAME }} # Database username
+    #       LIQUIBASE_PASSWORD: ${{ secrets.DB_PASSWORD }} # Database password
+    #     run: echo "Environment variables set."
 
-      # Step 5: Run Liquibase update
-      - name: Run Liquibase Update
-        env:
-          LIQUIBASE_URL: ${{ secrets.DB_URL }}
-          LIQUIBASE_USERNAME: ${{ secrets.DB_USERNAME }}
-          LIQUIBASE_PASSWORD: ${{ secrets.DB_PASSWORD }}
-        run: |
-          liquibase --changeLogFile=liquibase/changelog.xml \
-          --url=$LIQUIBASE_URL \
-          --username=$LIQUIBASE_USERNAME \
-          --password=$LIQUIBASE_PASSWORD \
-          update || { echo 'Liquibase update failed'; exit 1; }
+    #   # Step 5: Run Liquibase update
+    #   - name: Run Liquibase Update
+    #     env:
+    #       LIQUIBASE_URL: ${{ secrets.DB_URL }}
+    #       LIQUIBASE_USERNAME: ${{ secrets.DB_USERNAME }}
+    #       LIQUIBASE_PASSWORD: ${{ secrets.DB_PASSWORD }}
+    #     run: |
+    #       liquibase --changeLogFile=liquibase/changelog.xml \
+    #       --url=$LIQUIBASE_URL \
+    #       --username=$LIQUIBASE_USERNAME \
+    #       --password=$LIQUIBASE_PASSWORD \
+    #       update || { echo 'Liquibase update failed'; exit 1; }
 
     #   # Step 6: Run Liquibase rollback (optional)
     #   - name: Run Liquibase Rollback
