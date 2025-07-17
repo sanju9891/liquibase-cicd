@@ -1,4 +1,3 @@
-yaml
 name: Liquibase Database Changes
 
 on:
