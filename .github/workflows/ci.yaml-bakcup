@@ -1,0 +1,62 @@
+# .github/workflows/liquibase-ci.yml
+name: Liquibase CI - Validate Changelogs
+
+on:
+  pull_request:
+    branches:
+      - main # Target branch for PRs
+    paths:
+      #- 'src/main/resources/db/changelog/**' # Only run if changelogs change
+      - 'liquibase/changelog/**' # Only run if changelogs change
+
+jobs:
+  validate_changelogs:
+    runs-on: ubuntu-latest
+
+    # Use a dummy database for validation if you don't want to hit a real one
+    # For a more robust check, connect to a dev/test database
+    env:
+      LIQUIBASE_DATABASE_URL: ${{ secrets.DB_URL_DEV }} # Use dev DB for validation
+      LIQUIBASE_USERNAME: ${{ secrets.DB_USERNAME_DEV }}
+      LIQUIBASE_PASSWORD: ${{ secrets.DB_PASSWORD_DEV }}
+      LIQUIBASE_CHANGELOG_FILE: src/main/resources/db/changelog/db.changelog-master.yaml
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java (if your project requires it, e.g., for Maven/Gradle)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Cache Maven dependencies (optional, if using Maven/Gradle)
+        if: success() && steps.setup-java.outputs.cache-hit != 'true'
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Run Liquibase Validate
+        # This checks for structural errors in your changelog files
+        uses: liquibase/liquibase-github-action@v5.0.0
+        with:
+          operation: 'validate'
+          changeLogFile: ${{ env.LIQUIBASE_CHANGELOG_FILE }}
+          # No database connection needed for pure validation unless you're validating against schema
+          # For a comprehensive CI, you might connect to a test DB.
+
+      - name: Run Liquibase Status (Show Pending Changes)
+        # Connects to a dev database to show which changesets would be applied
+        uses: liquibase/liquibase-github-action@v5.0.0
+        with:
+          operation: 'status'
+          changeLogFile: ${{ env.LIQUIBASE_CHANGELOG_FILE }}
+          url: ${{ env.LIQUIBASE_DATABASE_URL }}
+          username: ${{ env.LIQUIBASE_USERNAME }}
+          password: ${{ env.LIQUIBASE_PASSWORD }}
+          # Add --verbose to see details of pending changes
+          args: '--verbose'

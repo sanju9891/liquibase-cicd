@@ -19,7 +19,7 @@ jobs:
     runs-on: self-hosted
  
     env:
-      LIQUIBASE_VERSION: 4.24.0
+      LIQUIBASE_VERSION: 4.31.1 #4.24.0
       ENV: ${{ github.event.inputs.environment }}
  
     steps:
@@ -48,12 +48,12 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Install unzip (required for Liquibase)
-        run: sudo apt-get update && sudo apt-get install -y unzip
+      # - name: Install unzip (required for Liquibase)
+      #   run: sudo apt-get update && sudo apt-get install -y unzip
  
       - name: Install Liquibase
         run: |
-          curl -sL https://github.com/liquibase/liquibase/releases/download/v${LIQUIBASE_VERSION}/liquibase-${LIQUIBASE_VERSION}.tar.gz 
+          wget https://github.com/liquibase/liquibase/releases/download/v${LIQUIBASE_VERSION}/liquibase-${LIQUIBASE_VERSION}.zip 
           unzip -o liquibase.zip -d liquibase
           chmod +x liquibase/liquibase
           echo "${GITHUB_WORKSPACE}/liquibase" >> $GITHUB_PATH
