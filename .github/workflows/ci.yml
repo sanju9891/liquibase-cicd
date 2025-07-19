@@ -52,8 +52,8 @@ jobs:
       #   run: sudo apt-get update && sudo apt-get install -y unzip
  
       - name: Install Liquibase
-        id: liquibase-${LIQUIBASE_VERSION}.zip
-        if: steps.liquibase-${LIQUIBASE_VERSION}.zip.outputs.exists == 'false'
+        # id: liquibase-${LIQUIBASE_VERSION}.zip
+        # if: steps.liquibase-${LIQUIBASE_VERSION}.zip.outputs.exists == 'false'
         run: |
           wget https://github.com/liquibase/liquibase/releases/download/v${LIQUIBASE_VERSION}/liquibase-${LIQUIBASE_VERSION}.zip 
           unzip -o liquibase-${LIQUIBASE_VERSION}.zip -d liquibase
