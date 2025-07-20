@@ -21,7 +21,7 @@ jobs:
     - name: Run Liquibase migrations
       run: |
         liquibase \
-          --changeLogFile=db/changelog.xml \
+          --changeLogFile=/home/ubuntu/liquibase_project/db/changelog.xml \
           --url=jdbc:mysql://localhost:3306/dev?autoReconnect=true&useSSL=false &allowPublicKeyRetrieval=true \
           --username=dev \
           --password=Str0ng@Pass567 \
