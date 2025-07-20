@@ -18,11 +18,24 @@ jobs:
     #   with:
     #     java-version: '11'
 
+    # - name: Run Liquibase migrations
+    #   run: |
+    #     liquibase \
+    #       --changeLogFile=/home/ubuntu/liquibase_project/db/changelog.xml \
+    #       --url=jdbc:mysql://localhost:3306/dev?autoReconnect=true&useSSL=false &allowPublicKeyRetrieval=true \
+    #       --username=dev \
+    #       --password=Str0ng@Pass567 \
+    #       update
+
     - name: Run Liquibase migrations
       run: |
         liquibase \
-          --changeLogFile=/home/ubuntu/liquibase_project/db/changelog.xml \
-          --url=jdbc:mysql://localhost:3306/dev?autoReconnect=true&useSSL=false &allowPublicKeyRetrieval=true \
-          --username=dev \
-          --password=Str0ng@Pass567 \
+          --defaults-file=/home/ubuntu/liquibase_project/config/dev.liquibase.properties \
+          --classpath=/usr/share/java/mysql-connector-java-8.0.33.jar \
+        #   --changeLogFile=/home/ubuntu/liquibase_project/db/changelog.xml \
+        #   --url=jdbc:mysql://localhost:3306/dev?autoReconnect=true&useSSL=false &allowPublicKeyRetrieval=true \
+        #   --username=dev \
+        #   --password=Str0ng@Pass567 \
           update
+
+# liquibase --defaults-file=config/prod.liquibase.properties --classpath=/usr/share/java/mysql-connector-java-8.0.33.jar update
