@@ -1,39 +1,79 @@
 name: Liquibase Deploy
-
-on:
+'on':
   workflow_dispatch:
     inputs:
       environment:
         description: 'Target environment (dev, sit, uat)'
         required: true
-        default: 'dev'
+        default: dev
         type: choice
         options:
           - dev
           - sit
           - uat
-
 jobs:
   liquibase-deploy:
     runs-on: ubuntu-latest
     env:
-      LIQUIBASE_VERSION: '4.28.0'
+      LIQUIBASE_VERSION: 4.28.0
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
       - name: Download Liquibase
         run: |
           liquibase --version
-
       - name: Copy environment properties
-        run: |
-          cp config/dev/${{ github.event.inputs.environment }}.liquibase.properties liquibase_files/liquibase.properties
-
+        run: >
+          cp config/dev/${{ github.event.inputs.environment
+          }}.liquibase.properties liquibase_files/liquibase.properties
       - name: Run Liquibase update
-        run: |
+        run: >
           cd liquibase_files
-          liquibase --defaultsFile=liquibase.properties --changeLogFile=liquibase_files/changelog.xml update
+
+          liquibase --defaultsFile=liquibase.properties
+          --changeLogFile=liquibase_files/changelog.xml update
+
+
+
+
+
+
+# name: Liquibase Deploy
+
+# on:
+#   workflow_dispatch:
+#     inputs:
+#       environment:
+#         description: 'Target environment (dev, sit, uat)'
+#         required: true
+#         default: 'dev'
+#         type: choice
+#         options:
+#           - dev
+#           - sit
+#           - uat
+
+# jobs:
+#   liquibase-deploy:
+#     runs-on: ubuntu-latest
+#     env:
+#       LIQUIBASE_VERSION: '4.28.0'
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v4
+
+#       - name: Download Liquibase
+#         run: |
+#           liquibase --version
+
+#       - name: Copy environment properties
+#         run: |
+#           cp config/dev/${{ github.event.inputs.environment }}.liquibase.properties liquibase_files/liquibase.properties
+
+#       - name: Run Liquibase update
+#         run: |
+#           cd liquibase_files
+#           liquibase --defaultsFile=liquibase.properties --changeLogFile=liquibase_files/changelog.xml update
 
     #   - name: Set up Java
     #     uses: actions/setup-java@v4
