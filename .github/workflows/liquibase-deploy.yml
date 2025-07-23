@@ -28,6 +28,7 @@ jobs:
           }}.liquibase.properties liquibase_files/liquibase.properties
       - name: Run Liquibase update
         run: >
+          mkdir -p liquibase_files
           cd liquibase_files
 
           liquibase --defaultsFile=liquibase.properties
