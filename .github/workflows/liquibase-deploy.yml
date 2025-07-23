@@ -22,17 +22,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-    #   - name: Set up Java
-    #     uses: actions/setup-java@v4
-    #     with:
-    #       distribution: 'temurin'
-    #       java-version: '17'
-
       - name: Download Liquibase
         run: |
-        #   curl -L https://github.com/liquibase/liquibase/releases/download/v${LIQUIBASE_VERSION}/liquibase-${LIQUIBASE_VERSION}.tar.gz -o liquibase.tar.gz
-        #   tar -xzf liquibase.tar.gz
-        #   sudo mv liquibase /usr/local/bin/liquibase
           liquibase --version
 
       - name: Copy environment properties
@@ -43,6 +34,28 @@ jobs:
         run: |
           cd liquibase_files
           liquibase --defaultsFile=liquibase.properties --changeLogFile=liquibase_files/changelog.xml update
+
+    #   - name: Set up Java
+    #     uses: actions/setup-java@v4
+    #     with:
+    #       distribution: 'temurin'
+    #       java-version: '17'
+
+    #   - name: Download Liquibase
+    #     run: |
+    #     #   curl -L https://github.com/liquibase/liquibase/releases/download/v${LIQUIBASE_VERSION}/liquibase-${LIQUIBASE_VERSION}.tar.gz -o liquibase.tar.gz
+    #     #   tar -xzf liquibase.tar.gz
+    #     #   sudo mv liquibase /usr/local/bin/liquibase
+    #       liquibase --version
+
+    #   - name: Copy environment properties
+    #     run: |
+    #       cp config/dev/${{ github.event.inputs.environment }}.liquibase.properties liquibase_files/liquibase.properties
+
+    #   - name: Run Liquibase update
+    #     run: |
+    #       cd liquibase_files
+    #       liquibase --defaultsFile=liquibase.properties --changeLogFile=liquibase_files/changelog.xml update
     #   - name: Clean up
     #     run: |  
     #       rm -rf liquibase_files
