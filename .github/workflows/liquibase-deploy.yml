@@ -100,4 +100,7 @@ jobs:
     #       rm -rf liquibase_files
     #       rm liquibase.tar.gz  
           
-#liquibase --defaultsFile=liquibase.properties --classpath=/usr/share/java/mysql-connector-java-8.0.33.jar update
+###liquibase --defaultsFile=liquibase.properties --classpath=/usr/share/java/mysql-connector-java-8.0.33.jar update
+
+###ssh ubuntu@localhost "liquibase --search-path=/home/ubuntu/liquibase-base-multi-env --defaultsFile=/home/ubuntu/liquibase-base-multi-env/liquibase.properties --changeLogFile=db/changelog.xml --classpath=/usr/share/java/mysql-connector-java-8.0.33.jar update"
+
