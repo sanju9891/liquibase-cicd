@@ -60,10 +60,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Download Liquibase
-        run: liquibase --version
-  
+ 
       - name: Copy environment properties
         run: |
           cp config/dev/${{ github.event.inputs.environment }}.liquibase.properties liquibase_files/liquibase.properties
