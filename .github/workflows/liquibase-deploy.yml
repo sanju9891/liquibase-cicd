@@ -78,18 +78,18 @@ jobs:
         run: |
           # IMPORTANT: Replace REMOTE_VM_PUBLIC_IP with the actual public IP/hostname.
           # You should store this as a GitHub Secret!
-          ssh -vvv -o StrictHostKeyChecking=no -o ConnectTimeout=60 ubuntu@${{ secrets.REMOTE_VM_PUBLIC_IP }} "date"
+          ssh -vvv -o StrictHostKeyChecking=no -o ConnectTimeout=60 ubuntu@192.168.0.102 "date"
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
 
       
       - name: Connect and Run Liquibase test
-        run: |
-          ssh -vvv -o StrictHostKeyChecking=no -o ConnectTimeout=60 ubuntu@${{ secrets.REMOTE_VM_PUBLIC_IP }} "liquibase --search-path=/home/ubuntu/liquibase-base-multi-env --defaultsFile=/home/ubuntu/liquibase-base-multi-env/liquibase.properties --changeLogFile=db/changelog.xml --classpath=/usr/share/java/mysql-connector-java-8.0.33.jar update"
-        #  ssh -o StrictHostKeyChecking=no -o ConnectTimeout=300 ubuntu@192.168.0.102 "liquibase --search-path=/home/ubuntu/liquibase-base-multi-env --defaultsFile=/home/ubuntu/liquibase-base-multi-env/liquibase.properties --changeLogFile=db/changelog.xml --classpath=/usr/share/java/mysql-connector-java-8.0.33.jar update"
+        run: |          
+          ssh -o StrictHostKeyChecking=no -o ConnectTimeout=300 ubuntu@192.168.0.102 "liquibase --search-path=/home/ubuntu/liquibase-base-multi-env --defaultsFile=/home/ubuntu/liquibase-base-multi-env/liquibase.properties --changeLogFile=db/changelog.xml --classpath=/usr/share/java/mysql-connector-java-8.0.33.jar update"
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock # Ensure the agent is used
-
+          
+      # ssh -vvv -o StrictHostKeyChecking=no -o ConnectTimeout=60 ubuntu@${{ secrets.REMOTE_VM_PUBLIC_IP }} "liquibase --search-path=/home/ubuntu/liquibase-base-multi-env --defaultsFile=/home/ubuntu/liquibase-base-multi-env/liquibase.properties --changeLogFile=db/changelog.xml --classpath=/usr/share/java/mysql-connector-java-8.0.33.jar update"
       # - name: Copy environment properties
       #   run: |
       #     cp config/dev/${{ github.event.inputs.environment }}.liquibase.properties liquibase_files/liquibase.properties
