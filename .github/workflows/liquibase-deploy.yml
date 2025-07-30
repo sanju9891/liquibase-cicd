@@ -61,18 +61,33 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-#       - name: Download Liquibase
-#         run: |
-#           liquibase --version
+      - name: Download Liquibase
+        run: |
+          liquibase --version
+  
+      - name: Copy environment properties
+        run: |
+          cp config/dev/${{ github.event.inputs.environment }}.liquibase.properties liquibase_files/liquibase.properties
+      
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      
+      - name: Connect and Run Liquibase test
+        run: |
+          ssh -o StrictHostKeyChecking=no ubuntu@localhost "liquibase --search-path=/home/ubuntu/liquibase-base-multi-env --defaultsFile=/home/ubuntu/liquibase-base-multi-env/liquibase.properties --changeLogFile=db/changelog.xml --classpath=/usr/share/java/mysql-connector-java-8.0.33.jar update"
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock # Ensure the agent is used
 
-#       - name: Copy environment properties
-#         run: |
-#           cp config/dev/${{ github.event.inputs.environment }}.liquibase.properties liquibase_files/liquibase.properties
+      # - name: Copy environment properties
+      #   run: |
+      #     cp config/dev/${{ github.event.inputs.environment }}.liquibase.properties liquibase_files/liquibase.properties
 
-#       - name: Run Liquibase update
-#         run: |
-#           cd liquibase_files
-#           liquibase --defaultsFile=liquibase.properties --changeLogFile=liquibase_files/changelog.xml update
+      # - name: Run Liquibase update
+      #   run: |
+      #     cd liquibase_files
+      #     liquibase --defaultsFile=liquibase.properties --changeLogFile=liquibase_files/changelog.xml update
 
     #   - name: Set up Java
     #     uses: actions/setup-java@v4
