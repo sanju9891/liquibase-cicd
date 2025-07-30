@@ -72,7 +72,7 @@ jobs:
       
       - name: Connect and Run Liquibase test
         run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@192.168.0.102 "liquibase --search-path=/home/ubuntu/liquibase-base-multi-env --defaultsFile=/home/ubuntu/liquibase-base-multi-env/liquibase.properties --changeLogFile=db/changelog.xml --classpath=/usr/share/java/mysql-connector-java-8.0.33.jar update" || true
+          ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 ubuntu@192.168.0.102 "liquibase --search-path=/home/ubuntu/liquibase-base-multi-env --defaultsFile=/home/ubuntu/liquibase-base-multi-env/liquibase.properties --changeLogFile=db/changelog.xml --classpath=/usr/share/java/mysql-connector-java-8.0.33.jar update" || true
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock # Ensure the agent is used
 
