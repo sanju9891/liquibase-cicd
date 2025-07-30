@@ -70,6 +70,10 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      - name: Add known hosts
+        run: |
+          ssh-keyscan -H ${{ secrets.REMOTE_VM_PUBLIC_IP }} >> ~/.ssh/known_hosts
+
       - name: Run date command on remote VM
         run: |
           # IMPORTANT: Replace REMOTE_VM_PUBLIC_IP with the actual public IP/hostname.
