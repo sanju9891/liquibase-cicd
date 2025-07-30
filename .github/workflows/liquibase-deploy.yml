@@ -69,6 +69,15 @@ jobs:
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Run date command on remote VM
+        run: |
+          # IMPORTANT: Replace REMOTE_VM_PUBLIC_IP with the actual public IP/hostname.
+          # You should store this as a GitHub Secret!
+          ssh -vvv -o StrictHostKeyChecking=no -o ConnectTimeout=60 ubuntu@${{ secrets.REMOTE_VM_PUBLIC_IP }} "date"
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+
       
       - name: Connect and Run Liquibase test
         run: |
