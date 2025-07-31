@@ -54,8 +54,8 @@ on:
 
 jobs:
   liquibase-deploy:
-    runs-on: self-hosted
-    # runs-on: ubuntu-latest
+    # runs-on: self-hosted
+    runs-on: ubuntu-latest
     env:
       LIQUIBASE_VERSION: '4.28.0'
     steps:
