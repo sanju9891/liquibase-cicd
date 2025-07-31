@@ -1,3 +1,46 @@
+name: Liquibase Multi-Env CI
+ 
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target Environment'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - sit
+          - uat
+ 
+jobs:
+  liquibase-deploy:
+    runs-on: self-hosted
+ 
+    env:
+      LIQUIBASE_VERSION: 4.31.1 #4.24.0
+      ENV: ${{ github.event.inputs.environment }}
+ 
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'  # Specify the Java version
+          distribution: 'adopt'
+
+      - name: Install Liquibase
+        run: |
+          curl -Lo liquibase.zip https://github.com/liquibase/liquibase/releases/latest/download/liquibase-4.10.0.zip
+          echo "Liquibase installed successfully."
+          ls -lah
+          unzip liquibase.zip -d liquibase
+       
+
+
+
 # name: Liquibase Deploy
 # 'on':
 #   workflow_dispatch:
@@ -37,57 +80,57 @@
 
 
 
-name: Liquibase Deploy
+# name: Liquibase Deploy
 
-on:
-  workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Target environment (dev, sit, uat)'
-        required: true
-        default: 'dev'
-        type: choice
-        options:
-          - dev
-          - sit
-          - uat
+# on:
+#   workflow_dispatch:
+#     inputs:
+#       environment:
+#         description: 'Target environment (dev, sit, uat)'
+#         required: true
+#         default: 'dev'
+#         type: choice
+#         options:
+#           - dev
+#           - sit
+#           - uat
 
-jobs:
-  liquibase-deploy:
-    runs-on: ubuntu-latest
-    env:
-      LIQUIBASE_VERSION: '4.28.0'
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+# jobs:
+#   liquibase-deploy:
+#     runs-on: ubuntu-latest
+#     env:
+#       LIQUIBASE_VERSION: '4.28.0'
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v4
  
-      - name: Copy environment properties
-        run: |
-          cp config/dev/${{ github.event.inputs.environment }}.liquibase.properties liquibase_files/liquibase.properties
+#       - name: Copy environment properties
+#         run: |
+#           cp config/dev/${{ github.event.inputs.environment }}.liquibase.properties liquibase_files/liquibase.properties
       
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+#       - name: Setup SSH
+#         uses: webfactory/ssh-agent@v0.9.0
+#         with:
+#           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      # - name: Add known hosts
-      #   run: |
-      #     ssh-keyscan -H ${{ secrets.REMOTE_VM_PUBLIC_IP }} >> ~/.ssh/known_hosts
+#       # - name: Add known hosts
+#       #   run: |
+#       #     ssh-keyscan -H ${{ secrets.REMOTE_VM_PUBLIC_IP }} >> ~/.ssh/known_hosts
 
-      - name: Run date command on remote VM
-        run: |
-          # IMPORTANT: Replace REMOTE_VM_PUBLIC_IP with the actual public IP/hostname.
-          # You should store this as a GitHub Secret!
-          ssh -vvv -o StrictHostKeyChecking=no -o ConnectTimeout=60 ubuntu@192.168.0.102 "date"
-        env:
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+#       - name: Run date command on remote VM
+#         run: |
+#           # IMPORTANT: Replace REMOTE_VM_PUBLIC_IP with the actual public IP/hostname.
+#           # You should store this as a GitHub Secret!
+#           ssh -vvv -o StrictHostKeyChecking=no -o ConnectTimeout=60 ubuntu@192.168.0.102 "date"
+#         env:
+#           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
 
       
-      - name: Connect and Run Liquibase test
-        run: |          
-          ssh -o StrictHostKeyChecking=no -o ConnectTimeout=300 ubuntu@192.168.0.102 "liquibase --search-path=/home/ubuntu/liquibase-base-multi-env --defaultsFile=/home/ubuntu/liquibase-base-multi-env/liquibase.properties --changeLogFile=db/changelog.xml --classpath=/usr/share/java/mysql-connector-java-8.0.33.jar update"
-        env:
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock # Ensure the agent is used
+#       - name: Connect and Run Liquibase test
+#         run: |          
+#           ssh -o StrictHostKeyChecking=no -o ConnectTimeout=300 ubuntu@192.168.0.102 "liquibase --search-path=/home/ubuntu/liquibase-base-multi-env --defaultsFile=/home/ubuntu/liquibase-base-multi-env/liquibase.properties --changeLogFile=db/changelog.xml --classpath=/usr/share/java/mysql-connector-java-8.0.33.jar update"
+#         env:
+#           SSH_AUTH_SOCK: /tmp/ssh_agent.sock # Ensure the agent is used
           
       # ssh -vvv -o StrictHostKeyChecking=no -o ConnectTimeout=60 ubuntu@${{ secrets.REMOTE_VM_PUBLIC_IP }} "liquibase --search-path=/home/ubuntu/liquibase-base-multi-env --defaultsFile=/home/ubuntu/liquibase-base-multi-env/liquibase.properties --changeLogFile=db/changelog.xml --classpath=/usr/share/java/mysql-connector-java-8.0.33.jar update"
       # - name: Copy environment properties
