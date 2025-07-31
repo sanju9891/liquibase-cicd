@@ -95,6 +95,7 @@ jobs:
 #           - sit
 #           - uat
 
+<<<<<<< HEAD
 # jobs:
 #   liquibase-deploy:
 #     runs-on: ubuntu-latest
@@ -103,6 +104,17 @@ jobs:
 #     steps:
 #       - name: Checkout repository
 #         uses: actions/checkout@v4
+=======
+jobs:
+  liquibase-deploy:
+    # runs-on: self-hosted
+    runs-on: ubuntu-latest
+    env:
+      LIQUIBASE_VERSION: '4.28.0'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+>>>>>>> f89af7dde044971fde8ead5341744d5ec94674db
  
 #       - name: Copy environment properties
 #         run: |
