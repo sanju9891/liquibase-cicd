@@ -1,42 +1,130 @@
-name: Liquibase Multi-Env CI
- 
+############
+####Airtel
+#############
+
+
+name: Liquibase Deployment Pipeline
+
 on:
+  push:
+    branches: [ "main" ]
   workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Target Environment'
-        required: true
-        default: 'dev'
-        type: choice
-        options:
-          - dev
-          - sit
-          - uat
- 
+
 jobs:
-  liquibase-deploy:
-    runs-on: self-hosted
- 
-    env:
-      LIQUIBASE_VERSION: 4.31.1 #4.24.0
-      ENV: ${{ github.event.inputs.environment }}
- 
+  build:
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      # 1. Checkout the project repository
+      - uses: actions/checkout@v4
 
-      - name: Set up JDK
-        uses: actions/setup-java@v2
+      # 2. Run unit tests (optional)
+      - name: Run Tests
+        run: ./mvnw test
+
+      # 3. Package Java app (if needed)
+      - name: Build JAR
+        run: ./mvnw package
+
+      # 4. Upload Liquibase folder as an artifact
+      - name: Upload Liquibase Changelogs
+        uses: actions/upload-artifact@v4
         with:
-          java-version: '11'  # Specify the Java version
-          distribution: 'adopt'
+          name: liquibase-changelogs
+          path: src/main/resources/db/changelog/
 
-      - name: Install Liquibase
-        run: |
-          curl -Lo liquibase.zip https://github.com/liquibase/liquibase/releases/latest/download/liquibase-4.10.0.zip
-          echo "Liquibase installed successfully."
-          ls -lah
-          unzip liquibase.zip -d liquibase
+      # 5. Upload package JAR as artifact (optional)
+      - name: Upload JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-jar
+          path: target/myapp-*.jar
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        env: [ dev, staging, prod ]
+
+    environment:
+      name: ${{ matrix.env }}
+
+    steps:
+      # 6. Checkout again for deployment context
+      - uses: actions/checkout@v4
+
+      # 7. Download changelogs artifact
+      - name: Download Changelogs
+        uses: actions/download-artifact@v4
+        with:
+          name: liquibase-changelogs
+          path: db/changelog/
+
+      # 8. Download app jar (optional)
+      - name: Download Jar
+        uses: actions/download-artifact@v4
+        with:
+          name: app-jar
+          path: target/
+
+      # # 9. Run Liquibase migration (secrets per environment)
+      # - name: Liquibase Update
+      #   uses: liquibase/liquibase-github-action@v4
+      #   with:
+      #     operation: update
+      #     changelogFile: db/changelog/db.changelog-master.xml
+      #     url: ${{ secrets["DB_${{ matrix.env | upper }}_URL"] }}
+      #     username: ${{ secrets["DB_${{ matrix.env | upper }}_USER"] }}
+      #     password: ${{ secrets["DB_${{ matrix.env | upper }}_PASSWORD"] }}
+      #     classpath: 'target/myapp-*.jar' # Only if needed for DB drivers
+
+
+
+
+
+
+
+
+
+# name: Liquibase Multi-Env CI
+ 
+# on:
+#   workflow_dispatch:
+#     inputs:
+#       environment:
+#         description: 'Target Environment'
+#         required: true
+#         default: 'dev'
+#         type: choice
+#         options:
+#           - dev
+#           - sit
+#           - uat
+ 
+# jobs:
+#   liquibase-deploy:
+#     runs-on: self-hosted
+ 
+#     env:
+#       LIQUIBASE_VERSION: 4.31.1 #4.24.0
+#       ENV: ${{ github.event.inputs.environment }}
+ 
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
+
+#       - name: Set up JDK
+#         uses: actions/setup-java@v2
+#         with:
+#           java-version: '11'  # Specify the Java version
+#           distribution: 'adopt'
+
+#       - name: Install Liquibase
+#         run: |
+#           curl -Lo liquibase.zip https://github.com/liquibase/liquibase/releases/latest/download/liquibase-4.10.0.zip
+#           echo "Liquibase installed successfully."
+#           ls -lah
+#           unzip liquibase.zip -d liquibase
        
 
 
