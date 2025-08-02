@@ -55,7 +55,7 @@ jobs:
 
     - name: Run Liquibase validate
       run: |
-        mvn clean compile liquibase/liquibase --defaultsFile=config/dev/dev.liquibase.properties --changeLogFile=liquibase_files/changelog.xml validate      
+        liquibase/liquibase --defaultsFile=config/dev/dev.liquibase.properties --changeLogFile=liquibase_files/changelog.xml validate      
   
     # - name: Download MySQL JDBC Driver
     #   run: |
