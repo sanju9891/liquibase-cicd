@@ -32,7 +32,8 @@ jobs:
     - name: Install Liquibase
       run: |
         wget https://github.com/liquibase/liquibase/releases/download/v${{ env.LIQUIBASE_VERSION }}/liquibase-${{ env.LIQUIBASE_VERSION }}.tar.gz
-        tar -xzf liquibase-${{ env.LIQUIBASE_VERSION }}.tar.gz
+        mkdir -p liquibase
+        tar -xzf liquibase-${{ env.LIQUIBASE_VERSION }}.tar.gz -C liquibase
         chmod +x liquibase/liquibase
 
 
