@@ -48,8 +48,8 @@ jobs:
 
     - name: Run Liquibase validate
       run: |
-        cd liquibase_files
-        liquibase --defaultsFile=liquibase.properties --changeLogFile=liquibase_files/changelog.xml validate      
+#      cd liquibase_files
+        liquibase/liquibase --defaultsFile=liquibase_files/liquibase.properties --changeLogFile=liquibase_files/changelog.xml validate      
   
     # - name: Download MySQL JDBC Driver
     #   run: |
