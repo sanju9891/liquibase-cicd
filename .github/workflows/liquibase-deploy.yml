@@ -61,7 +61,7 @@ jobs:
         mvn liquibase:status -DchangeLogFile=liquibase_files/changelog.xml -Dliquibase.propertyFile=liquibase_files/liquibase.properties
 
     - name: Upload changelog artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: liquibase-changelog
         path: ./changelogs/db-changelog.xml        
