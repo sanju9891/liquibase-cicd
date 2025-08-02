@@ -56,9 +56,9 @@ jobs:
         mvn liquibase:status -DchangeLogFile=liquibase_files/changelog.xml -Dliquibase.propertyFile=liquibase_files/liquibase.properties
 
 
-    - name: Run Liquibase update
+    - name: Run Liquibase validate
       run: |
-        mvn liquibase:update -DchangeLogFile=liquibase_files/changelog.xml -Dliquibase.propertyFile=liquibase_files/liquibase.properties
+        mvn liquibase:status -DchangeLogFile=liquibase_files/changelog.xml -Dliquibase.propertyFile=liquibase_files/liquibase.properties
     
     # - name: Run Liquibase update
     #   run: |
