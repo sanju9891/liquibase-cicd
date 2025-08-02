@@ -30,15 +30,6 @@
             <column name="email"/>
         </createIndex>
     </changeSet>
-
-
-    <!-- ChangeSet 4: Create an index -->
-    <changeSet id="4" author="Pune">
-        <createIndex indexName="idx_employee_email" tableName="new employee">
-            <column name="email ID"/>
-        </createIndex>
-    </changeSet>
-
     
 </databaseChangeLog> -->
 
