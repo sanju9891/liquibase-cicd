@@ -1,4 +1,4 @@
-<plugin>
+<!-- <plugin>
   <groupId>org.liquibase</groupId>
   <artifactId>liquibase-maven-plugin</artifactId>
   <version>4.33.0</version>
@@ -9,4 +9,33 @@
     <password>${password}</password>
     <driver>com.mysql.cj.jdbc.Driver</driver>
   </configuration>
-</plugin>
+</plugin> -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <groupId>org.liquibase</groupId>
+  <artifactId>liquibase-maven-plugin</artifactId>
+  <version>1.0.0</version>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.liquibase</groupId>
+        <artifactId>liquibase-maven-plugin</artifactId>
+        <version>4.33.0</version>
+        <configuration>
+          <changeLogFile>liquibase_files/changelog.xml</changeLogFile>
+          <url>${url}</url>
+          <username>${username}</username>
+          <password>${password}</password>
+          <driver>com.mysql.cj.jdbc.Driver</driver>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
