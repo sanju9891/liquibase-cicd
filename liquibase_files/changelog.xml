@@ -1,11 +1,11 @@
-<!-- <?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <databaseChangeLog
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
 
-    <!- ChangeSet 1: Create a table -->
+    <!-- ChangeSet 1: Create a table -->
     <changeSet id="1" author="sanjay.khatri">
         <createTable tableName="employee">
             <column name="id" type="INT">
@@ -30,6 +30,5 @@
             <column name="email"/>
         </createIndex>
     </changeSet>
-    
-</databaseChangeLog> -->
 
+</databaseChangeLog>
