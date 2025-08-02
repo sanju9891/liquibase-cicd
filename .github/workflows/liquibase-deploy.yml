@@ -35,14 +35,23 @@ jobs:
         mkdir -p liquibase
         tar -xzf liquibase-${{ env.LIQUIBASE_VERSION }}.tar.gz -C liquibase
         chmod +x liquibase/liquibase
-    
+
+    - name: Copy environment properties
+      run: |
+        cp config/dev/dev.liquibase.properties liquibase_files/liquibase.properties
+
+    - name: Run Liquibase validate
+      run: |
+        cd liquibase_files
+        liquibase --defaultsFile=liquibase.properties --changeLogFile=liquibase_files/changelog.xml validate      
+  
     # - name: Download MySQL JDBC Driver
     #   run: |
     #     wget https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.33/mysql-connector-java-8.0.33.jar -P liquibase/lib/
 
-    - name: Validate changelog
-      run: |
-        ./liquibase/liquibase --defaultsFile=config/dev.liquibase.properties validate
+    # - name: Validate changelog
+    #   run: |
+    #     ./liquibase/liquibase --defaultsFile=config/dev.liquibase.properties validate
 
 #     liquibase --defaultsFile=liquibase.properties --classpath=/usr/share/java/mysql-connector-java-8.0.33.jar update
 
