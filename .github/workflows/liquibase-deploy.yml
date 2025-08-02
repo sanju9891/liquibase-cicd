@@ -69,7 +69,7 @@ jobs:
         echo "Listing files in the current directory..."
         ls -R
         echo "Checking for the changelog file..."
-        if [ -f "./changelogs/db-changelog.xml" ]; then
+        if [ -f "./changelogs/changelog.xml" ]; then
           echo "File found!"
         else
           echo "File not found!"
@@ -80,7 +80,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: liquibase-changelog
-        path: ./changelogs/db-changelog.xml
+        path: ./changelogs/changelog.xml
 
     # - name: Upload changelog artifact
     #   uses: actions/upload-artifact@v4
