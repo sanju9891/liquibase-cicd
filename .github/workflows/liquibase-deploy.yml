@@ -60,11 +60,33 @@ jobs:
       run: |
         mvn liquibase:status -DchangeLogFile=liquibase_files/changelog.xml -Dliquibase.propertyFile=liquibase_files/liquibase.properties
 
-    - name: Upload changelog artifact
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+      # Add a step to debug the file path
+    - name: Debug and list files
+      run: |
+        echo "Listing files in the current directory..."
+        ls -R
+        echo "Checking for the changelog file..."
+        if [ -f "./changelogs/db-changelog.xml" ]; then
+          echo "File found!"
+        else
+          echo "File not found!"
+          exit 1 # This will fail the job if the file is missing
+        fi
+
+    - name: Upload Liquibase Changelog
       uses: actions/upload-artifact@v4
       with:
         name: liquibase-changelog
-        path: ./changelogs/db-changelog.xml        
+        path: ./changelogs/db-changelog.xml
+
+    # - name: Upload changelog artifact
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: liquibase-changelog
+    #     path: ./changelogs/db-changelog.xml        
 
     # - name: Run Liquibase update
     #   run: |
