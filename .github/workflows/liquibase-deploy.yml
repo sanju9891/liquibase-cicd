@@ -36,9 +36,9 @@ jobs:
         tar -xzf liquibase-${{ env.LIQUIBASE_VERSION }}.tar.gz -C liquibase
         chmod +x liquibase/liquibase
     
-    - name: Download MySQL JDBC Driver
-      run: |
-        wget https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.33/mysql-connector-java-8.0.33.jar -P liquibase/lib/
+    # - name: Download MySQL JDBC Driver
+    #   run: |
+    #     wget https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.33/mysql-connector-java-8.0.33.jar -P liquibase/lib/
 
     - name: Validate changelog
       run: |
