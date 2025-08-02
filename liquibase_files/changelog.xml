@@ -1,221 +1,44 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!-- <?xml version="1.0" encoding="UTF-8"?>
 <databaseChangeLog
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-    xmlns:pro="http://www.liquibase.org/xml/ns/pro"
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
-        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
-        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
 
-    <property name="schema.name" value="public"/>
-    <property name="table.prefix" value="app_"/>
-
-    <changeSet id="1" author="admin">
-        <comment>Create initial user and product tables</comment>
-        <createTable tableName="${table.prefix}users" schemaName="${schema.name}">
-            <column name="id" type="BIGINT" autoIncrement="true">
+    <!-- ChangeSet 1: Create a table -->
+    <changeSet id="1" author="sanjay.khatri">
+        <createTable tableName="employee">
+            <column name="id" type="INT">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="username" type="VARCHAR(255)">
-                <constraints nullable="false" unique="true"/>
-            </column>
-            <column name="email" type="VARCHAR(255)">
-                <constraints nullable="false" unique="true"/>
-            </column>
-            <column name="password_hash" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-
-        <createTable tableName="${table.prefix}products" schemaName="${schema.name}">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="name" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="description" type="TEXT"/>
-            <column name="price" type="DECIMAL(10, 2)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="stock_quantity" type="INTEGER" defaultValue="0">
-                <constraints nullable="false"/>
-            </column>
+            <column name="name" type="VARCHAR(100)"/>
+            <column name="email" type="VARCHAR(150)"/>
+            <column name="created_at" type="TIMESTAMP"/>
         </createTable>
     </changeSet>
 
-    <changeSet id="2" author="dev1">
-        <comment>Add orders and order items tables with foreign keys and index</comment>
-        <createTable tableName="${table.prefix}orders" schemaName="${schema.name}">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="user_id" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="order_date" type="DATE" defaultValueComputed="CURRENT_DATE">
-                <constraints nullable="false"/>
-            </column>
-            <column name="total_amount" type="DECIMAL(10, 2)" defaultValue="0.00">
-                <constraints nullable="false"/>
-            </column>
-            <column name="status" type="VARCHAR(50)" defaultValue="PENDING">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
+    <!-- ChangeSet 2: Add a new column -->
+    <changeSet id="2" author="sanjay.khatri">
+        <addColumn tableName="employee">
+            <column name="department" type="VARCHAR(100)"/>
+        </addColumn>
+    </changeSet>
 
-        <addForeignKeyConstraint
-            baseTableName="${table.prefix}orders"
-            baseColumnNames="user_id"
-            constraintName="fk_orders_users"
-            referencedTableName="${table.prefix}users"
-            referencedColumnNames="id"/>
-
-        <createTable tableName="${table.prefix}order_items" schemaName="${schema.name}">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="order_id" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="product_id" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="quantity" type="INTEGER">
-                <constraints nullable="false"/>
-            </column>
-            <column name="price_at_order" type="DECIMAL(10, 2)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-
-        <addForeignKeyConstraint
-            baseTableName="${table.prefix}order_items"
-            baseColumnNames="order_id"
-            constraintName="fk_order_items_orders"
-            referencedTableName="${table.prefix}orders"
-            referencedColumnNames="id"/>
-
-        <addForeignKeyConstraint
-            baseTableName="${table.prefix}order_items"
-            baseColumnNames="product_id"
-            constraintName="fk_order_items_products"
-            referencedTableName="${table.prefix}products"
-            referencedColumnNames="id"/>
-
-        <createIndex tableName="${table.prefix}orders" indexName="idx_orders_user_id">
-            <column name="user_id"/>
+    <!-- ChangeSet 3: Create an index -->
+    <changeSet id="3" author="sanjay.khatri">
+        <createIndex indexName="idx_employee_email" tableName="employee">
+            <column name="email"/>
         </createIndex>
     </changeSet>
 
-    <changeSet id="3" author="dev2">
-        <comment>Add categories, initial data, and a summary view</comment>
-        <createTable tableName="${table.prefix}categories" schemaName="${schema.name}">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="name" type="VARCHAR(100)">
-                <constraints nullable="false" unique="true"/>
-            </column>
-        </createTable>
 
-        <addColumn tableName="${table.prefix}products" schemaName="${schema.name}">
-            <column name="category_id" type="BIGINT"/>
-        </addColumn>
-
-        <addForeignKeyConstraint
-            baseTableName="${table.prefix}products"
-            baseColumnNames="category_id"
-            constraintName="fk_products_categories"
-            referencedTableName="${table.prefix}categories"
-            referencedColumnNames="id"/>
-
-        <insert tableName="${table.prefix}categories" schemaName="${schema.name}">
-            <column name="name" value="Electronics"/>
-        </insert>
-        <insert tableName="${table.prefix}categories" schemaName="${schema.name}">
-            <column name="name" value="Books"/>
-        </insert>
-        <insert tableName="${table.prefix}categories" schemaName="${schema.name}">
-            <column name="name" value="Clothing"/>
-        </insert>
-
-        <insert tableName="${table.prefix}users" schemaName="${schema.name}">
-            <column name="username" value="johndoe"/>
-            <column name="email" value="john.doe@example.com"/>
-            <column name="password_hash" value="some_hashed_password"/>
-        </insert>
-
-        <insert tableName="${table.prefix}products" schemaName="${schema.name}">
-            <column name="name" value="Laptop"/>
-            <column name="description" value="Powerful laptop for work and gaming."/>
-            <column name="price" value="1200.00"/>
-            <column name="stock_quantity" value="50"/>
-        </insert>
-        
-        <sql>
-            -- A custom SQL block to update the newly created product
-            UPDATE ${schema.name}.${table.prefix}products
-            SET category_id = (SELECT id FROM ${schema.name}.${table.prefix}categories WHERE name = 'Electronics')
-            WHERE name = 'Laptop';
-        </sql>
+    <!-- ChangeSet 4: Create an index -->
+    <changeSet id="4" author="Pune">
+        <createIndex indexName="idx_employee_email" tableName="new employee">
+            <column name="email ID"/>
+        </createIndex>
     </changeSet>
 
-    <changeSet id="4" author="dev3">
-        <comment>Rename a column, update data, and create a stored procedure</comment>
-        <preConditions onFail="MARK_RAN">
-            <columnExists tableName="${table.prefix}products" columnName="stock_quantity"/>
-        </preConditions>
-        <renameColumn
-            schemaName="${schema.name}"
-            tableName="${table.prefix}products"
-            oldColumnName="stock_quantity"
-            newColumnName="available_stock"
-            columnDataType="INTEGER"/>
-    </changeSet>
+    
 
-    <changeSet id="5" author="dev4">
-        <comment>Create a view for popular products (optional)</comment>
-        <createView
-            viewName="popular_products"
-            replaceIfExists="true"
-            schemaName="${schema.name}">
-            SELECT
-                p.name AS product_name,
-                c.name AS category_name,
-                SUM(oi.quantity) AS total_sold
-            FROM
-                ${table.prefix}products p
-            JOIN
-                ${table.prefix}order_items oi ON p.id = oi.product_id
-            JOIN
-                ${table.prefix}categories c ON p.category_id = c.id
-            GROUP BY
-                p.name, c.name
-            ORDER BY
-                total_sold DESC;
-        </createView>
-    </changeSet>
-
-    <changeSet id="6" author="dev5">
-        <comment>Create a stored procedure to get user's total spending</comment>
-        <createProcedure
-            schemaName="${schema.name}"
-            procedureName="get_user_total_spending">
-            <![CDATA[
-                CREATE PROCEDURE ${schema.name}.get_user_total_spending(IN user_id_param BIGINT, OUT total_spending DECIMAL(10, 2))
-                BEGIN
-                    SELECT SUM(total_amount) INTO total_spending
-                    FROM ${schema.name}.${table.prefix}orders
-                    WHERE user_id = user_id_param;
-                END;
-            ]]>
-        </createProcedure>
-    </changeSet>
-
-</databaseChangeLog>
+</databaseChangeLog> -->
