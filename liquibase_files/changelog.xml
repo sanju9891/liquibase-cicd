@@ -31,4 +31,31 @@
         </createIndex>
     </changeSet>
 
+    <!-- ChangeSet 4: Create a table -->
+    <changeSet id="4" author="sanjay.Kumar">
+        <createTable tableName="employee">
+            <column name="id" type="INT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(100)"/>
+            <column name="email" type="VARCHAR(150)"/>
+            <column name="created_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+    <!-- ChangeSet 5: Add a new column -->
+    <changeSet id="5" author="sanjay.Kumar">
+        <addColumn tableName="employee">
+            <column name="department" type="VARCHAR(100)"/>
+        </addColumn>
+    </changeSet>
+
+    <!-- ChangeSet 6: Create an index -->
+    <changeSet id="6" author="sanjay.Kumar">
+        <createIndex indexName="idx_employee_email" tableName="employee">
+            <column name="email"/>
+        </createIndex>
+    </changeSet>
+    
+
 </databaseChangeLog>
