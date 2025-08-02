@@ -38,6 +38,7 @@ jobs:
         echo "view installation directory"
         pwd
         ls -ltra
+        liquibase/liquibase --version
 
     - name: Copy environment properties
       run: |
