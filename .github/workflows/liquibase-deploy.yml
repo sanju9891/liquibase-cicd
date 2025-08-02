@@ -35,10 +35,15 @@ jobs:
         mkdir -p liquibase
         tar -xzf liquibase-${{ env.LIQUIBASE_VERSION }}.tar.gz -C liquibase
         chmod +x liquibase/liquibase
+        echo "view installation directory"
+        pwd
+        ls -ltra
 
     - name: Copy environment properties
       run: |
         cp config/dev/dev.liquibase.properties liquibase_files/liquibase.properties
+        pwd
+        ls -ltra
 
     - name: Run Liquibase validate
       run: |
