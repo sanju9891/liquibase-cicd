@@ -55,16 +55,16 @@ jobs:
 
     - name: Run Liquibase status
       run: |        
-        mvn liquibase:status -Ddb.url=jdbc:mysql://54.81.168.214:3306/uat?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true -Ddb.username=uat -Ddb.password=Str0ng@Pass890
+        mvn liquibase:status -DchangeLogFile=liquibase_files/changelog.xml -Dliquibase.propertyFile=liquibase_files/liquibase.properties
 
 
     - name: Run Liquibase validate
       run: |
-        mvn liquibase:validate -Ddb.url=jdbc:mysql://54.81.168.214:3306/uat?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true -Ddb.username=uat -Ddb.password=Str0ng@Pass890
+        mvn liquibase:status -DchangeLogFile=liquibase_files/changelog.xml -Dliquibase.propertyFile=liquibase_files/liquibase.properties
     
-    - name: Run Liquibase update
-      run: |
-        mvn liquibase:update -DchangeLogFile=liquibase_files/changelog.xml -Dliquibase.propertyFile=liquibase_files/liquibase.properties
+    # - name: Run Liquibase update
+    #   run: |
+    #     mvn liquibase:update -DchangeLogFile=liquibase_files/changelog.xml -Dliquibase.propertyFile=liquibase_files/liquibase.properties
 
   
     # - name: Download MySQL JDBC Driver
