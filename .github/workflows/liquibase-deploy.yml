@@ -57,6 +57,14 @@ jobs:
       run: |
         mvn liquibase:status -DchangeLogFile=liquibase_files/changelog.xml -Dliquibase.propertyFile=liquibase_files/liquibase.properties
 
+    - name: Run Liquibase validate
+      run: |
+        mvn liquibase:validate -DchangeLogFile=liquibase_files/changelog.xml -Dliquibase.propertyFile=liquibase_files/liquibase.properties
+    
+    - name: Run Liquibase update
+      run: |
+        mvn liquibase:update -DchangeLogFile=liquibase_files/changelog.xml -Dliquibase.propertyFile=liquibase_files/liquibase.properties
+
   
     # - name: Download MySQL JDBC Driver
     #   run: |
