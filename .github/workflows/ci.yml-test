@@ -23,21 +23,21 @@ jobs:
       ENV: ${{ github.event.inputs.environment }}
  
     steps:
-      # - name: Checkout code
-      #   uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      # - name: Set up JDK
-      #   uses: actions/setup-java@v2
-      #   with:
-      #     java-version: '11'  # Specify the Java version
-      #     distribution: 'adopt'
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'  # Specify the Java version
+          distribution: 'adopt'
 
-      # - name: Install Liquibase
-      #   run: |
-      #     curl -Lo liquibase.zip https://github.com/liquibase/liquibase/releases/latest/download/liquibase-4.10.0.zip
-      #     echo "Liquibase installed successfully."
-      #     ls -lah
-      #     unzip liquibase.zip -d liquibase
+      - name: Install Liquibase
+        run: |
+          curl -Lo liquibase.zip https://github.com/liquibase/liquibase/releases/latest/download/liquibase-4.10.0.zip
+          echo "Liquibase installed successfully."
+          ls -lah
+          unzip liquibase.zip -d liquibase
        
       - name: Checkout Code
         uses: actions/checkout@v4

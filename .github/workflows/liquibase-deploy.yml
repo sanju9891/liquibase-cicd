@@ -1,71 +1,124 @@
-############
-####Airtel
-#############
-
-
-name: Liquibase Deployment Pipeline
+name: Database Migration Pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
   workflow_dispatch:
 
+env:
+  LIQUIBASE_VERSION: 4.20.0
+
 jobs:
-  build:
+  # Stage 1: Build and Test in Dev Environment
+  dev-migration:
     runs-on: ubuntu-latest
+    outputs:
+      migration-needed: ${{ steps.check-changes.outputs.changes }}
+    
     steps:
-      # 1. Checkout the project repository
-      - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
 
-      # 2. Run unit tests (optional)
-      - name: Run Tests
-        run: ./mvnw test
+    - name: Set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'adopt'
 
-      # 3. Package Java app (if needed)
-      - name: Build JAR
-        run: ./mvnw package
+    - name: Install Liquibase
+      run: |
+        wget https://github.com/liquibase/liquibase/releases/download/v${{ env.LIQUIBASE_VERSION }}/liquibase-${{ env.LIQUIBASE_VERSION }}.tar.gz
+        tar -xzf liquibase-${{ env.LIQUIBASE_VERSION }}.tar.gz
+        chmod +x liquibase/liquibase
 
-      # 4. Upload Liquibase folder as an artifact
-      - name: Upload Liquibase Changelogs
-        uses: actions/upload-artifact@v4
-        with:
-          name: liquibase-changelogs
-          path: src/main/resources/db/changelog/
 
-      # 5. Upload package JAR as artifact (optional)
-      - name: Upload JAR
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-jar
-          path: target/myapp-*.jar
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        env: [ dev, staging, prod ]
 
-    environment:
-      name: ${{ matrix.env }}
 
-    steps:
-      # 6. Checkout again for deployment context
-      - uses: actions/checkout@v4
 
-      # 7. Download changelogs artifact
-      - name: Download Changelogs
-        uses: actions/download-artifact@v4
-        with:
-          name: liquibase-changelogs
-          path: db/changelog/
 
-      # 8. Download app jar (optional)
-      - name: Download Jar
-        uses: actions/download-artifact@v4
-        with:
-          name: app-jar
-          path: target/
+
+
+
+
+
+
+
+
+
+
+# ############
+# ####Airtel
+# #############
+
+
+# name: Liquibase Deployment Pipeline
+
+# on:
+#   push:
+#     branches: [ "main" ]
+#   workflow_dispatch:
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#       # 1. Checkout the project repository
+#       - uses: actions/checkout@v4
+
+#       # 2. Run unit tests (optional)
+#       - name: Run Tests
+#         run: ./mvn test
+
+#       # 3. Package Java app (if needed)
+#       - name: Build JAR
+#         run: ./mvn package
+
+#       # 4. Upload Liquibase folder as an artifact
+#       - name: Upload Liquibase Changelogs
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: liquibase-changelogs
+#           path: src/main/resources/db/changelog/
+
+#       # 5. Upload package JAR as artifact (optional)
+#       - name: Upload JAR
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: app-jar
+#           path: target/myapp-*.jar
+
+#   deploy:
+#     needs: build
+#     runs-on: ubuntu-latest
+#     strategy:
+#       matrix:
+#         env: [ dev, staging, prod ]
+
+#     environment:
+#       name: ${{ matrix.env }}
+
+#     steps:
+#       # 6. Checkout again for deployment context
+#       - uses: actions/checkout@v4
+
+#       # 7. Download changelogs artifact
+#       - name: Download Changelogs
+#         uses: actions/download-artifact@v4
+#         with:
+#           name: liquibase-changelogs
+#           path: db/changelog/
+
+#       # 8. Download app jar (optional)
+#       - name: Download Jar
+#         uses: actions/download-artifact@v4
+#         with:
+#           name: app-jar
+#           path: target/
 
       # # 9. Run Liquibase migration (secrets per environment)
       # - name: Liquibase Update
