@@ -54,12 +54,13 @@ jobs:
         ls -ltra
 
     - name: Run Liquibase status
-      run: |
-        mvn liquibase:status -DchangeLogFile=liquibase_files/changelog.xml -Dliquibase.propertyFile=liquibase_files/liquibase.properties
+      run: |        
+        mvn liquibase:status -Ddb.url=jdbc:mysql://54.81.168.214:3306/uat?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true -Ddb.username=uat -Ddb.password=Str0ng@Pass890
+
 
     - name: Run Liquibase validate
       run: |
-        mvn liquibase:validate -DchangeLogFile=liquibase_files/changelog.xml -Dliquibase.propertyFile=liquibase_files/liquibase.properties
+        mvn liquibase:validate -Ddb.url=jdbc:mysql://54.81.168.214:3306/uat?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true -Ddb.username=uat -Ddb.password=Str0ng@Pass890
     
     - name: Run Liquibase update
       run: |
@@ -76,7 +77,7 @@ jobs:
 
 #     liquibase --defaultsFile=liquibase.properties --classpath=/usr/share/java/mysql-connector-java-8.0.33.jar update
 #     mvn liquibase/liquibase:status --defaultsFile=liquibase_files/liquibase.properties --changeLogFile=liquibase_files/changelog.xml
-
+# mvn liquibase:status -DchangeLogFile=liquibase_files/changelog.xml -Dliquibase.propertyFile=liquibase_files/liquibase.properties
 
 
 
