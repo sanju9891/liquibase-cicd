@@ -48,7 +48,7 @@ jobs:
 
     - name: Run Liquibase validate
       run: |
-        liquibase/liquibase --defaultsFile=config/dev/dev.liquibase.properties --changeLogFile=liquibase_files/changelog.xml validate      
+        liquibase/liquibase --defaultsFile=config/dev/dev.liquibase.properties --classpath=mysql-connector-java-8.0.33.jar --changeLogFile=liquibase_files/changelog.xml validate      
   
     # - name: Download MySQL JDBC Driver
     #   run: |
