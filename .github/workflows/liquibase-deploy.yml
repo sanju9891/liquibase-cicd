@@ -59,7 +59,13 @@ jobs:
     - name: Run Liquibase validate
       run: |
         mvn liquibase:status -DchangeLogFile=liquibase_files/changelog.xml -Dliquibase.propertyFile=liquibase_files/liquibase.properties
-    
+
+    - name: Upload changelog artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: liquibase-changelog
+        path: ./changelogs/db-changelog.xml        
+
     # - name: Run Liquibase update
     #   run: |
     #     mvn liquibase:update -DchangeLogFile=liquibase_files/changelog.xml -Dliquibase.propertyFile=liquibase_files/liquibase.properties
