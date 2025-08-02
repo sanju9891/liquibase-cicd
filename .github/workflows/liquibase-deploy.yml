@@ -55,7 +55,7 @@ jobs:
 
     - name: Run Liquibase status
       run: |
-        mvn liquibase/liquibase:status --defaultsFile=config/dev/dev.liquibase.properties --changeLogFile=liquibase_files/changelog.xml
+        mvn liquibase/liquibase:status --defaultsFile=liquibase_files/liquibase.properties --changeLogFile=liquibase_files/changelog.xml
   
     # - name: Download MySQL JDBC Driver
     #   run: |
