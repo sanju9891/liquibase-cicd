@@ -3,3 +3,16 @@
   <artifactId>mysql-connector-j</artifactId>
   <version>8.0.33</version> <!-- or the latest stable version -->
 </dependency>
+
+<plugin>
+  <groupId>org.liquibase</groupId>
+  <artifactId>liquibase-maven-plugin</artifactId>
+  <version>4.33.0</version>
+  <configuration>
+    <changeLogFile>liquibase_files/changelog.xml</changeLogFile>
+    <url>${url}</url>
+    <username>${username}</username>
+    <password>${password}</password>
+    <driver>com.mysql.cj.jdbc.Driver</driver>
+  </configuration>
+</plugin>

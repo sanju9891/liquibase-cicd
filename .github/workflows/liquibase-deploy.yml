@@ -39,6 +39,13 @@ jobs:
         pwd
         ls -ltra
         liquibase/liquibase --version
+    
+    - name: Cache Maven packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2-
 
     - name: Copy environment properties
       run: |
@@ -48,7 +55,7 @@ jobs:
 
     - name: Run Liquibase validate
       run: |
-        liquibase/liquibase --defaultsFile=config/dev/dev.liquibase.properties --classpath=mysql-connector-java-8.0.33.jar --changeLogFile=liquibase_files/changelog.xml validate      
+        mvn clean compile liquibase/liquibase --defaultsFile=config/dev/dev.liquibase.properties --classpath=mysql-connector-java-8.0.33.jar --changeLogFile=liquibase_files/changelog.xml validate      
   
     # - name: Download MySQL JDBC Driver
     #   run: |
