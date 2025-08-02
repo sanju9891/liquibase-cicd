@@ -19,12 +19,12 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
     - name: Set up JDK 11
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
         java-version: '11'
         distribution: 'adopt'
@@ -48,20 +48,17 @@ jobs:
     - name: Copy environment properties
       run: |
         cp config/dev/dev.liquibase.properties liquibase_files/liquibase.properties
-        pwd
-        ls -ltra
 
     - name: Run Liquibase status
       run: |        
         mvn liquibase:status -DchangeLogFile=liquibase_files/changelog.xml -Dliquibase.propertyFile=liquibase_files/liquibase.properties
 
-
     - name: Run Liquibase validate
       run: |
         mvn liquibase:status -DchangeLogFile=liquibase_files/changelog.xml -Dliquibase.propertyFile=liquibase_files/liquibase.properties
 
-    - name: Checkout code
-      uses: actions/checkout@v4
+    # - name: Checkout code
+    #   uses: actions/checkout@v4
 
       # Add a step to debug the file path
     - name: Debug and list files
