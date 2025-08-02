@@ -53,9 +53,9 @@ jobs:
         pwd
         ls -ltra
 
-    - name: Run Liquibase validate
+    - name: Run Liquibase status
       run: |
-        liquibase/liquibase --defaultsFile=config/dev/dev.liquibase.properties --changeLogFile=liquibase_files/changelog.xml validate      
+        liquibase/liquibase --defaultsFile=config/dev/dev.liquibase.properties --changeLogFile=liquibase_files/changelog.xml status      
   
     # - name: Download MySQL JDBC Driver
     #   run: |
