@@ -1,0 +1,46 @@
+name: Liquibase Deployment on UAT & SIT
+ 
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target Environment'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - prod
+          - uat
+ 
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download changelog artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: liquibase-changelog
+          path: ./changelogs
+
+      - name: Set env secrets
+        run: |
+          if [[ "${{ github.event.inputs.environment }}" == "prod" ]]; then
+            echo "DB_URL=${{ secrets.SIT_DB_URL }}" >> $GITHUB_ENV
+            echo "DB_USER=${{ secrets.SIT_DB_USER }}" >> $GITHUB_ENV
+            echo "DB_PASSWORD=${{ secrets.SIT_DB_PASSWORD }}" >> $GITHUB_ENV
+          elif [[ "${{ github.event.inputs.environment }}" == "uat" ]]; then
+            echo "DB_URL=${{ secrets.UAT_DB_URL }}" >> $GITHUB_ENV
+            echo "DB_USER=${{ secrets.UAT_DB_USER }}" >> $GITHUB_ENV
+            echo "DB_PASSWORD=${{ secrets.UAT_DB_PASSWORD }}" >> $GITHUB_ENV
+          fi
+
+      - name: Run Liquibase Update on target env
+        uses: liquibase-github-actions/update@v4.x
+        with:
+          changelogFile: ./changelogs/db-changelog.xml
+          url: ${{ env.DB_URL }}
+          username: ${{ env.DB_USER }}
+          password: ${{ env.DB_PASSWORD }}
+
+ 
