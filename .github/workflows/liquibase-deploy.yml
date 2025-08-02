@@ -37,8 +37,6 @@ jobs:
         chmod +x liquibase/liquibase
         echo "view installation directory"
         pwd
-        ls -ltra
-        liquibase/liquibase --version
     
     # - name: Cache Maven packages
     #   uses: actions/cache@v3
