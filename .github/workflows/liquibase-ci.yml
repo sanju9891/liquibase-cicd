@@ -55,9 +55,9 @@ jobs:
         with:
           name: liquibase-deployment-bundle
           path: |
-            src/main/resources/db/changelog/
-            pom.xml
-            liquibase.properties
+            ./liquibase_files/changelog.xml
+            # pom.xml
+            # liquibase.properties
             # Include any other files needed for deployment, like JDBC drivers, etc.
 
 #   # Job 2: Deploy to Development Environment
