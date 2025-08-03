@@ -89,21 +89,21 @@ jobs:
     #       ls -R ${{ env.ARTIFACT_PATH }}
     #       test -f "${{ env.ARTIFACT_PATH }}/liquibase_files/changelog.xml"
 
-      - name: Copy environment properties
-        run: |
-          cp config/dev/dev.liquibase.properties liquibase_files/liquibase.properties
+    #   - name: Copy environment properties
+    #     run: |
+    #       cp config/dev/dev.liquibase.properties liquibase_files/liquibase.properties
 
       - name: Run Liquibase update
         run: |        
           mvn liquibase:update -DchangeLogFile=liquibase_files/changelog.xml -Dliquibase.propertyFile=liquibase_files/liquibase.properties
 
-    #   - name: Run Liquibase update on Dev database
-    #     run: |
-    #       mvn liquibase:update \
-    #         -Dliquibase.url="${{ env.DB_URL }}" \
-    #         -Dliquibase.username="${{ env.DB_USERNAME }}" \
-    #         -Dliquibase.password="${{ env.DB_PASSWORD }}" \
-    #         -Dliquibase.changeLogFile="${{ env.ARTIFACT_PATH }}/src/main/resources/db/changelog/db-changelog.xml"
+      - name: Run Liquibase update on Dev database
+        run: |
+          mvn liquibase:update \
+            -Dliquibase.url="${{ env.DB_URL }}" \
+            -Dliquibase.username="${{ env.DB_USERNAME }}" \
+            -Dliquibase.password="${{ env.DB_PASSWORD }}" \
+            -Dliquibase.changeLogFile="${{ env.ARTIFACT_PATH }}/liquibase_files/changelog.xml"
 
 #   # Job 3: Deploy to UAT Environment
 #   # This job will not run until the 'validate_and_build' job is complete
