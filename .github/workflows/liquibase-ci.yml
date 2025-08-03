@@ -56,7 +56,7 @@ jobs:
           name: liquibase-deployment-bundle
           path: |
             /src/main/resources/liquibase_files/changelog.xml"
-            #./liquibase_files/changelog.xml
+            ./liquibase_files/changelog.xml
             # pom.xml
             # liquibase.properties
             # Include any other files needed for deployment, like JDBC drivers, etc.
@@ -72,7 +72,7 @@ jobs:
       DB_URL: ${{ secrets.DEV_DB_URL }}
       DB_USERNAME: ${{ secrets.DEV_DB_USERNAME }}
       DB_PASSWORD: ${{ secrets.DEV_DB_PASSWORD }}
-      ARTIFACT_PATH: ./liquibase-deployment-bundle/
+      ARTIFACT_PATH: ./liquibase-deployment-bundle
 
     steps:
       - name: Download changelog artifact
@@ -84,7 +84,7 @@ jobs:
       - name: Verify downloaded files
         run: |
           ls -R ${{ env.ARTIFACT_PATH }}
-          test -f "${{ env.ARTIFACT_PATH }}/src/main/resources/liquibase_files/changelog.xml"
+          test -f "${{ env.ARTIFACT_PATH }}/liquibase_files/changelog.xml"
 
       - name: Copy environment properties
         run: |
