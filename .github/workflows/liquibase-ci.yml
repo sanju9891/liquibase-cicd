@@ -68,10 +68,10 @@ jobs:
     needs: validate_and_build
     # Use a GitHub Environment for secure secrets management
     environment: dev
-    # env:
-    #   DB_URL: ${{ secrets.DEV_DB_URL }}
-    #   DB_USERNAME: ${{ secrets.DEV_DB_USERNAME }}
-    #   DB_PASSWORD: ${{ secrets.DEV_DB_PASSWORD }}
+    env:
+      DB_URL: ${{ secrets.DEV_DB_URL }}
+      DB_USERNAME: ${{ secrets.DEV_DB_USERNAME }}
+      DB_PASSWORD: ${{ secrets.DEV_DB_PASSWORD }}
       ARTIFACT_PATH: ./liquibase-deployment-bundle/
 
     steps:
