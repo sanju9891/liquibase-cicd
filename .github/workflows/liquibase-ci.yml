@@ -1,0 +1,131 @@
+name: Liquibase CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  # Job 1: Build and Validate
+  # This job runs once, validates the changelog, and creates a single artifact
+  validate_and_build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Run Liquibase status
+        run: mvn liquibase:status
+
+      - name: Upload changelog files as a deployment bundle artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: liquibase-deployment-bundle
+          path: |
+            src/main/resources/db/changelog/
+            pom.xml
+            liquibase.properties
+            # Include any other files needed for deployment, like JDBC drivers, etc.
+
+#   # Job 2: Deploy to Development Environment
+#   deploy_to_dev:
+#     runs-on: ubuntu-latest
+#     # This job must wait for the validation job to finish
+#     needs: validate_and_build
+#     # Use a GitHub Environment for secure secrets management
+#     environment: dev
+#     env:
+#       DB_URL: ${{ secrets.DEV_DB_URL }}
+#       DB_USERNAME: ${{ secrets.DEV_DB_USERNAME }}
+#       DB_PASSWORD: ${{ secrets.DEV_DB_PASSWORD }}
+#       ARTIFACT_PATH: ./liquibase-deployment-bundle/
+
+#     steps:
+#       - name: Download changelog artifact
+#         uses: actions/download-artifact@v4
+#         with:
+#           name: liquibase-deployment-bundle
+#           path: ${{ env.ARTIFACT_PATH }}
+
+#       - name: Verify downloaded files
+#         run: |
+#           ls -R ${{ env.ARTIFACT_PATH }}
+#           test -f "${{ env.ARTIFACT_PATH }}/src/main/resources/db/changelog/db-changelog.xml"
+
+#       - name: Run Liquibase update on Dev database
+#         run: |
+#           mvn liquibase:update \
+#             -Dliquibase.url="${{ env.DB_URL }}" \
+#             -Dliquibase.username="${{ env.DB_USERNAME }}" \
+#             -Dliquibase.password="${{ env.DB_PASSWORD }}" \
+#             -Dliquibase.changeLogFile="${{ env.ARTIFACT_PATH }}/src/main/resources/db/changelog/db-changelog.xml"
+
+#   # Job 3: Deploy to UAT Environment
+#   # This job will not run until the 'validate_and_build' job is complete
+#   deploy_to_uat:
+#     runs-on: ubuntu-latest
+#     needs: deploy_to_dev # Enforce a sequential deployment order
+#     environment: uat
+#     env:
+#       DB_URL: ${{ secrets.UAT_DB_URL }}
+#       DB_USERNAME: ${{ secrets.UAT_DB_USERNAME }}
+#       DB_PASSWORD: ${{ secrets.UAT_DB_PASSWORD }}
+#       ARTIFACT_PATH: ./liquibase-deployment-bundle/
+
+#     steps:
+#       - name: Download changelog artifact
+#         uses: actions/download-artifact@v4
+#         with:
+#           name: liquibase-deployment-bundle
+#           path: ${{ env.ARTIFACT_PATH }}
+
+#       - name: Run Liquibase update on UAT database
+#         run: |
+#           mvn liquibase:update \
+#             -Dliquibase.url="${{ env.DB_URL }}" \
+#             -Dliquibase.username="${{ env.DB_USERNAME }}" \
+#             -Dliquibase.password="${{ env.DB_PASSWORD }}" \
+#             -Dliquibase.changeLogFile="${{ env.ARTIFACT_PATH }}/src/main/resources/db/changelog/db-changelog.xml"
+
+#   # Job 4: Deploy to SIT Environment
+#   deploy_to_sit:
+#     runs-on: ubuntu-latest
+#     needs: deploy_to_uat # Enforce a sequential deployment order
+#     environment: sit
+#     env:
+#       DB_URL: ${{ secrets.SIT_DB_URL }}
+#       DB_USERNAME: ${{ secrets.SIT_DB_USERNAME }}
+#       DB_PASSWORD: ${{ secrets.SIT_DB_PASSWORD }}
+#       ARTIFACT_PATH: ./liquibase-deployment-bundle/
+
+#     steps:
+#       - name: Download changelog artifact
+#         uses: actions/download-artifact@v4
+#         with:
+#           name: liquibase-deployment-bundle
+#           path: ${{ env.ARTIFACT_PATH }}
+
+#       - name: Run Liquibase update on SIT database
+#         run: |
+#           mvn liquibase:update \
+#             -Dliquibase.url="${{ env.DB_URL }}" \
+#             -Dliquibase.username="${{ env.DB_USERNAME }}" \
+#             -Dliquibase.password="${{ env.DB_PASSWORD }}" \
+#             -Dliquibase.changeLogFile="${{ env.ARTIFACT_PATH }}/src/main/resources/db/changelog/db-changelog.xml"
