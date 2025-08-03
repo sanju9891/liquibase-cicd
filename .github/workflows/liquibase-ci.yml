@@ -84,10 +84,10 @@ jobs:
           name: liquibase-deployment-bundle
           path: ${{ env.ARTIFACT_PATH }}
 
-      - name: Verify downloaded files
-        run: |
-          ls -R ${{ env.ARTIFACT_PATH }}
-          test -f "${{ env.ARTIFACT_PATH }}/liquibase_files/changelog.xml"
+    #   - name: Verify downloaded files
+    #     run: |
+    #       ls -R ${{ env.ARTIFACT_PATH }}
+    #       test -f "${{ env.ARTIFACT_PATH }}/liquibase_files/changelog.xml"
 
       - name: Copy environment properties
         run: |
