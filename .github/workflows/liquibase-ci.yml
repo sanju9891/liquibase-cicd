@@ -86,7 +86,7 @@ jobs:
       - name: Verify downloaded files
         run: |
           ls -R ${{ env.ARTIFACT_PATH }}
-          test -f "${{ env.ARTIFACT_PATH }}/liquibase_files/changelog.xml"
+          test -f "${{ env.ARTIFACT_PATH }}/liquibase-cicd/liquibase_files/changelog.xml"
 
       - name: Copy environment properties
         run: |
