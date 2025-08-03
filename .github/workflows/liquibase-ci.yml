@@ -60,38 +60,46 @@ jobs:
             # liquibase.properties
             # Include any other files needed for deployment, like JDBC drivers, etc.
 
-#   # Job 2: Deploy to Development Environment
-#   deploy_to_dev:
-#     runs-on: ubuntu-latest
-#     # This job must wait for the validation job to finish
-#     needs: validate_and_build
-#     # Use a GitHub Environment for secure secrets management
-#     environment: dev
-#     env:
-#       DB_URL: ${{ secrets.DEV_DB_URL }}
-#       DB_USERNAME: ${{ secrets.DEV_DB_USERNAME }}
-#       DB_PASSWORD: ${{ secrets.DEV_DB_PASSWORD }}
-#       ARTIFACT_PATH: ./liquibase-deployment-bundle/
+  # Job 2: Deploy to Development Environment
+  deploy_to_dev:
+    runs-on: ubuntu-latest
+    # This job must wait for the validation job to finish
+    needs: validate_and_build
+    # Use a GitHub Environment for secure secrets management
+    environment: dev
+    env:
+      DB_URL: ${{ secrets.DEV_DB_URL }}
+      DB_USERNAME: ${{ secrets.DEV_DB_USERNAME }}
+      DB_PASSWORD: ${{ secrets.DEV_DB_PASSWORD }}
+      ARTIFACT_PATH: ./liquibase-deployment-bundle/
 
-#     steps:
-#       - name: Download changelog artifact
-#         uses: actions/download-artifact@v4
-#         with:
-#           name: liquibase-deployment-bundle
-#           path: ${{ env.ARTIFACT_PATH }}
+    steps:
+      - name: Download changelog artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: liquibase-deployment-bundle
+          path: ${{ env.ARTIFACT_PATH }}
 
-#       - name: Verify downloaded files
-#         run: |
-#           ls -R ${{ env.ARTIFACT_PATH }}
-#           test -f "${{ env.ARTIFACT_PATH }}/src/main/resources/db/changelog/db-changelog.xml"
+      - name: Verify downloaded files
+        run: |
+          ls -R ${{ env.ARTIFACT_PATH }}
+          test -f "${{ env.ARTIFACT_PATH }}/liquibase_files/changelog.xml"
 
-#       - name: Run Liquibase update on Dev database
-#         run: |
-#           mvn liquibase:update \
-#             -Dliquibase.url="${{ env.DB_URL }}" \
-#             -Dliquibase.username="${{ env.DB_USERNAME }}" \
-#             -Dliquibase.password="${{ env.DB_PASSWORD }}" \
-#             -Dliquibase.changeLogFile="${{ env.ARTIFACT_PATH }}/src/main/resources/db/changelog/db-changelog.xml"
+      - name: Copy environment properties
+        run: |
+          cp config/dev/dev.liquibase.properties liquibase_files/liquibase.properties
+
+      - name: Run Liquibase update
+        run: |        
+          mvn liquibase:update -DchangeLogFile=liquibase_files/changelog.xml -Dliquibase.propertyFile=liquibase_files/liquibase.properties
+
+    #   - name: Run Liquibase update on Dev database
+    #     run: |
+    #       mvn liquibase:update \
+    #         -Dliquibase.url="${{ env.DB_URL }}" \
+    #         -Dliquibase.username="${{ env.DB_USERNAME }}" \
+    #         -Dliquibase.password="${{ env.DB_PASSWORD }}" \
+    #         -Dliquibase.changeLogFile="${{ env.ARTIFACT_PATH }}/src/main/resources/db/changelog/db-changelog.xml"
 
 #   # Job 3: Deploy to UAT Environment
 #   # This job will not run until the 'validate_and_build' job is complete
