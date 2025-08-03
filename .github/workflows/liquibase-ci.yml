@@ -55,7 +55,8 @@ jobs:
         with:
           name: liquibase-deployment-bundle
           path: |
-            ./liquibase-cicd/liquibase_files/changelog.xml
+            ./liquibase_files/changelog.xml
+            #./liquibase-cicd/liquibase_files/changelog.xml
             #/src/main/resources/liquibase_files/changelog.xml
             #./liquibase_files/changelog.xml
             # pom.xml
@@ -86,7 +87,7 @@ jobs:
       - name: Verify downloaded files
         run: |
           ls -R ${{ env.ARTIFACT_PATH }}
-          test -f "${{ env.ARTIFACT_PATH }}/liquibase-cicd/liquibase_files/changelog.xml"
+          test -f "${{ env.ARTIFACT_PATH }}/liquibase_files/changelog.xml"
 
       - name: Copy environment properties
         run: |
