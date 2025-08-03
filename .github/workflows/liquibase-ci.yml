@@ -7,6 +7,8 @@ on:
   pull_request:
     branches:
       - main
+env:
+  LIQUIBASE_VERSION: 4.20.0
 
 jobs:
   # Job 1: Build and Validate
@@ -22,6 +24,13 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+
+      - name: Install Liquibase
+        run: |
+          wget https://github.com/liquibase/liquibase/releases/download/v${{ env.LIQUIBASE_VERSION }}/liquibase-${{ env.LIQUIBASE_VERSION }}.tar.gz
+          mkdir -p liquibase
+          tar -xzf liquibase-${{ env.LIQUIBASE_VERSION }}.tar.gz -C liquibase
+          chmod +x liquibase/liquibase
 
       - name: Cache Maven dependencies
         uses: actions/cache@v4
