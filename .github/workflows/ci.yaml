@@ -3,6 +3,9 @@ name: Liquibase Task on Self-Hosted Runner
 on:
   workflow_dispatch:
 
+env:
+  LIQUIBASE_VERSION: 4.20.0
+
 jobs:
   liquibase-task:
     # runs-on: self-hosted
