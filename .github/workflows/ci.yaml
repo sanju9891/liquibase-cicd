@@ -28,7 +28,6 @@ jobs:
           chmod +x liquibase/liquibase
           pwd
           ls -la
-          /usr/local/bin/
 
       - name: Copy environment properties
         run: |
