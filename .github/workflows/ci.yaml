@@ -37,7 +37,7 @@ jobs:
       - name: Run Liquibase status
         run: |
           cd liquibase_files
-          /usr/local/bin/liquibase --defaultsFile=liquibase.properties --changeLogFile=liquibase_files/changelog.xml status
+          /home/runner/work/liquibase-cicd/liquibase-cicd/liquibase --defaultsFile=liquibase.properties --changeLogFile=liquibase_files/changelog.xml status
 
       # - name: Run Liquibase status
       #   run: |
