@@ -27,15 +27,23 @@ jobs:
           tar -xzf liquibase-${{ env.LIQUIBASE_VERSION }}.tar.gz -C liquibase
           chmod +x liquibase/liquibase
 
+      - name: Copy environment properties
+        run: |
+          cp config/dev/dev.liquibase.properties liquibase_files/liquibase.properties
 
       - name: Run Liquibase status
         run: |
-          ./liquibase/liquibase \
-            --changeLogFile=changelogs/db.changelog.xml \
-            --url="${{ secrets.DB_URL }}" \
-            --username="${{ secrets.DB_USERNAME }}" \
-            --password="${{ secrets.DB_PASSWORD }}" \
-            status
+          cd liquibase_files
+          liquibase --defaultsFile=liquibase.properties --changeLogFile=liquibase_files/changelog.xml status
+
+      # - name: Run Liquibase status
+      #   run: |
+      #     ./liquibase/liquibase \
+      #       --changeLogFile=changelogs/db.changelog.xml \
+      #       --url="${{ secrets.DB_URL }}" \
+      #       --username="${{ secrets.DB_USERNAME }}" \
+      #       --password="${{ secrets.DB_PASSWORD }}" \
+      #       status
 
 
 
