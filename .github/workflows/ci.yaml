@@ -17,14 +17,13 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Download Liquibase
+      - name: Install Liquibase
         run: |
-          LIQUIBASE_VERSION=4.27.0
-          curl -L -o liquibase.tar.gz https://github.com/liquibase/liquibase/releases/download/v${LIQUIBASE_VERSION}/liquibase-${LIQUIBASE_VERSION}.tar.gz
-          tar -xzf liquibase.tar.gz
+          wget https://github.com/liquibase/liquibase/releases/download/v${{ env.LIQUIBASE_VERSION }}/liquibase-${{ env.LIQUIBASE_VERSION }}.tar.gz
           mkdir -p liquibase
-          mv liquibase-${LIQUIBASE_VERSION}/* liquibase/
-        #  mv liquibase-${LIQUIBASE_VERSION} liquibase
+          tar -xzf liquibase-${{ env.LIQUIBASE_VERSION }}.tar.gz -C liquibase
+          chmod +x liquibase/liquibase
+
 
       - name: Run Liquibase status
         run: |
