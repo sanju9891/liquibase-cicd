@@ -26,6 +26,9 @@ jobs:
           mkdir -p liquibase
           tar -xzf liquibase-${{ env.LIQUIBASE_VERSION }}.tar.gz -C liquibase
           chmod +x liquibase/liquibase
+          pwd
+          ls -la
+          /usr/local/bin/
 
       - name: Copy environment properties
         run: |
@@ -34,7 +37,7 @@ jobs:
       - name: Run Liquibase status
         run: |
           cd liquibase_files
-          liquibase --defaultsFile=liquibase.properties --changeLogFile=liquibase_files/changelog.xml status
+          /usr/local/bin/liquibase --defaultsFile=liquibase.properties --changeLogFile=liquibase_files/changelog.xml status
 
       # - name: Run Liquibase status
       #   run: |
