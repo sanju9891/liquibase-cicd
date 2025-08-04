@@ -22,7 +22,9 @@ jobs:
           LIQUIBASE_VERSION=4.27.0
           curl -L -o liquibase.tar.gz https://github.com/liquibase/liquibase/releases/download/v${LIQUIBASE_VERSION}/liquibase-${LIQUIBASE_VERSION}.tar.gz
           tar -xzf liquibase.tar.gz
-          mv liquibase-${LIQUIBASE_VERSION} liquibase
+          mkdir -p liquibase
+          mv liquibase-${LIQUIBASE_VERSION}/* liquibase/
+        #  mv liquibase-${LIQUIBASE_VERSION} liquibase
 
       - name: Run Liquibase status
         run: |
