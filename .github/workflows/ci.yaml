@@ -26,8 +26,8 @@ jobs:
           mkdir -p liquibase
           tar -xzf liquibase-${{ env.LIQUIBASE_VERSION }}.tar.gz -C liquibase
           chmod +x liquibase/liquibase
-          pwd
-          ls -la
+          echo "$PWD/liquibase" >> $GITHUB_PATH
+          ls -ls liquibase/liquibase && liquibase/liquibase --version
 
       - name: Copy environment properties
         run: |
