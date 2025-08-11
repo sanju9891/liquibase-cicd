@@ -37,9 +37,9 @@
         <version>4.33.0</version>
         <configuration>
           <changeLogFile>liquibase_files/changelog.xml</changeLogFile>
-          <url>${url}</url>
-          <username>${username}</username>
-          <password>${password}</password>
+          <url>jdbc:mysql://54.81.168.214:3306/dev?autoReconnect=true&useSSL=false &allowPublicKeyRetrieval=true</url>
+          <username>dev</username>
+          <password>Str0ng@Pass567</password>
           <driver>com.mysql.cj.jdbc.Driver</driver>
         </configuration>
       </plugin>
