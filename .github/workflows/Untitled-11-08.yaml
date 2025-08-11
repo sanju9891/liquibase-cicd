@@ -55,7 +55,7 @@ jobs:
         # The pom.xml is essential because it contains the plugin configuration.
         run: |
           cp pom.xml liquibase-deployment-bundle/
-          cp -r liquibase_files/changelog liquibase-deployment-bundle/
+          cp -r liquibase_files/ liquibase-deployment-bundle/
           # If you have custom JDBC drivers, copy them here as well
           # cp lib/mysql-connector-j-8.0.33.jar liquibase-deployment-bundle/
 
