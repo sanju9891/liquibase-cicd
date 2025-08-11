@@ -100,9 +100,6 @@ jobs:
       - name: Run Liquibase update on Dev database
         run: |
           mvn liquibase:status \
-        #    -Dliquibase.url="${{ secrets.DB_URL }}" \
-        #    -Dliquibase.username="${{ secrets.DB_USERNAME }}" \
-        #    -Dliquibase.password="${{ secrets.DB_PASSWORD }}" \
            -Dliquibase.changeLogFile="${{ env.ARTIFACT_PATH }}/liquibase_files/changelog.xml"
 
 #   # Job 3: Deploy to UAT Environment
@@ -157,3 +154,7 @@ jobs:
 #             -Dliquibase.username="${{ env.DB_USERNAME }}" \
 #             -Dliquibase.password="${{ env.DB_PASSWORD }}" \
 #             -Dliquibase.changeLogFile="${{ env.ARTIFACT_PATH }}/src/main/resources/db/changelog/db-changelog.xml"
+
+#    -Dliquibase.url="${{ secrets.DB_URL }}" \
+#    -Dliquibase.username="${{ secrets.DB_USERNAME }}" \
+#    -Dliquibase.password="${{ secrets.DB_PASSWORD }}" \
