@@ -69,43 +69,43 @@ jobs:
           path: liquibase-deployment-bundle/
           retention-days: 7
           
-  # # Job 2: Deploy to Development Environment
-  # deploy_to_dev:
-  #   runs-on: ubuntu-latest
-  #   # This job must wait for the validation job to finish successfully
-  #   needs: validate_and_build
-  #   # Use a GitHub Environment for secure secrets management
-  #   environment: dev
-  #   steps:
-  #     - name: Set up JDK 17
-  #       # This is a new job, so we need to set up the environment again
-  #       uses: actions/setup-java@v4
-  #       with:
-  #         distribution: 'temurin'
-  #         java-version: '17'
+  # Job 2: Deploy to Development Environment
+  deploy_to_dev:
+    runs-on: ubuntu-latest
+    # This job must wait for the validation job to finish successfully
+    needs: validate_and_build
+    # Use a GitHub Environment for secure secrets management
+    environment: dev
+    steps:
+      - name: Set up JDK 17
+        # This is a new job, so we need to set up the environment again
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
 
-  #     - name: Cache Maven dependencies
-  #       # Re-cache dependencies for this job
-  #       uses: actions/cache@v4
-  #       with:
-  #         path: ~/.m2/repository
-  #         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-  #         restore-keys: |
-  #           ${{ runner.os }}-maven-
+      - name: Cache Maven dependencies
+        # Re-cache dependencies for this job
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
 
-  #     - name: Download changelog artifact
-  #       # Download the artifact created in the previous job
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         name: liquibase-deployment-bundle
-  #         path: .
+      - name: Download changelog artifact
+        # Download the artifact created in the previous job
+        uses: actions/download-artifact@v4
+        with:
+          name: liquibase-deployment-bundle
+          path: .
 
-  #     - name: Run Liquibase update on Dev database
-  #       # This step securely uses the database credentials from GitHub secrets
-  #       # and performs the update command.
-  #       run: |
-  #         mvn liquibase:update \
-  #           -Dliquibase.changeLogFile=./db/changelog/db.changelog-master.xml \
-  #           -Dliquibase.url="${{ secrets.DEV_DB_URL }}" \
-  #           -Dliquibase.username="${{ secrets.DEV_DB_USERNAME }}" \
-  #           -Dliquibase.password="${{ secrets.DEV_DB_PASSWORD }}"
+      - name: Run Liquibase update on Dev database
+        # This step securely uses the database credentials from GitHub secrets
+        # and performs the update command.
+        run: |
+          mvn liquibase:update \
+            -Dliquibase.changeLogFile=./db/changelog/db.changelog-master.xml \
+            -Dliquibase.url="${{ secrets.DEV_DB_URL }}" \
+            -Dliquibase.username="${{ secrets.DEV_DB_USERNAME }}" \
+            -Dliquibase.password="${{ secrets.DEV_DB_PASSWORD }}"
