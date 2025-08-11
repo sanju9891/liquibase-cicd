@@ -100,10 +100,10 @@ jobs:
       - name: Run Liquibase update on Dev database
         run: |
           mvn liquibase:status \
-            -Dliquibase.url="${{ secrets.DB_URL }}" \
-            -Dliquibase.username="${{ secrets.DB_USERNAME }}" \
-            -Dliquibase.password="${{ secrets.DB_PASSWORD }}" \
-            -Dliquibase.changeLogFile="${{ env.ARTIFACT_PATH }}/liquibase_files/changelog.xml"
+        #    -Dliquibase.url="${{ secrets.DB_URL }}" \
+        #    -Dliquibase.username="${{ secrets.DB_USERNAME }}" \
+        #    -Dliquibase.password="${{ secrets.DB_PASSWORD }}" \
+           -Dliquibase.changeLogFile="${{ env.ARTIFACT_PATH }}/liquibase_files/changelog.xml"
 
 #   # Job 3: Deploy to UAT Environment
 #   # This job will not run until the 'validate_and_build' job is complete
