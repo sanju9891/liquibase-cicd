@@ -59,15 +59,15 @@ jobs:
           # If you have custom JDBC drivers, copy them here as well
           # cp lib/mysql-connector-j-8.0.33.jar liquibase-deployment-bundle/
 
-  #     - name: Upload deployment bundle artifact
-  #       # This step uploads the bundled files as a single artifact.
-  #       # The next job will download this artifact, ensuring that the same
-  #       # files are used for validation and deployment.
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: liquibase-deployment-bundle
-  #         path: liquibase-deployment-bundle/
-  #         retention-days: 7
+      - name: Upload deployment bundle artifact
+        # This step uploads the bundled files as a single artifact.
+        # The next job will download this artifact, ensuring that the same
+        # files are used for validation and deployment.
+        uses: actions/upload-artifact@v4
+        with:
+          name: liquibase-deployment-bundle
+          path: liquibase-deployment-bundle/
+          retention-days: 7
           
   # # Job 2: Deploy to Development Environment
   # deploy_to_dev:
