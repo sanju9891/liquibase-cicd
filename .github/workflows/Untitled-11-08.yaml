@@ -95,7 +95,7 @@ jobs:
 
       - name: Download changelog artifact
         # Download the artifact created in the previous job
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v4        
         with:
           name: liquibase-deployment-bundle
           path: .
@@ -109,4 +109,3 @@ jobs:
             -Dliquibase.url="${{ secrets.DEV_DB_URL }}" \
             -Dliquibase.username="${{ secrets.DEV_DB_USERNAME }}" \
             -Dliquibase.password="${{ secrets.DEV_DB_PASSWORD }}"
-
