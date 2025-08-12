@@ -133,10 +133,9 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Download changelog artifact
-        uses: actions/download-artifact@v4
+        # Download the artifact created in the previous job
+        uses: actions/download-artifact@v4        
         with:
-          # run-id: ${{ github.event.workflow_run.id }}
-          # github-token: ${{ secrets.TOKEN_GIT }}
           name: liquibase-deployment-bundle
           path: .
 
