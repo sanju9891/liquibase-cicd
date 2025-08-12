@@ -109,3 +109,4 @@ jobs:
             -Dliquibase.url="${{ secrets.DEV_DB_URL }}" \
             -Dliquibase.username="${{ secrets.DEV_DB_USERNAME }}" \
             -Dliquibase.password="${{ secrets.DEV_DB_PASSWORD }}"
+
