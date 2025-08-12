@@ -29,7 +29,7 @@
     <!-- add other dependencies here -->
   </dependencies>
 
-  <!-- <build>
+  <build>
     <plugins>
       <plugin>
         <groupId>org.liquibase</groupId>
@@ -37,12 +37,12 @@
         <version>4.33.0</version>
         <configuration>
           <changeLogFile>liquibase_files/changelog.xml</changeLogFile>
-          <url>${url}</url>
+          <!-- <url>${url}</url>
           <username>${username}</username>
-          <password>${password}</password>
+          <password>${password}</password> -->
           <driver>com.mysql.cj.jdbc.Driver</driver>
         </configuration>
       </plugin>
     </plugins>
-  </build> -->
+  </build>
 </project>
