@@ -1,0 +1,91 @@
+name: Liquibase Database Changes
+
+on:
+  push:
+    branches:
+      - main
+#   pull_request:
+#     branches:
+#       - main
+
+jobs:
+  liquibase:
+    runs-on: self-hosted
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 2: Set up Java (required for Liquibase)
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11' # Specify the Java version required for Liquibase
+
+      # Step 3: Install Liquibase
+      - name: Install Liquibase
+        run: |
+          curl -O https://github.com/liquibase/liquibase/releases/download/v4.10.0/liquibase-4.10.0.tar.gz
+          tar -xzf liquibase-4.10.0.tar.gz
+          sudo mv liquibase /usr/local/bin/
+          liquibase --version # Verify installation
+
+
+
+
+# # .github/workflows/deploy-to-uat.yml
+# name: Deploy to UAT
+
+# on:
+#   workflow_run:
+#     workflows: ["Upload Workflow Name"] # Replace with the name of your first workflow
+#     types: [completed]
+#     branches: [main]
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+#     if: github.event.workflow_run.conclusion == 'success'
+#     steps:
+#       - name: Download changelog artifact from prior workflow
+#         uses: actions/download-artifact@v4
+#         with:
+#           name: liquibase-deployment-bundle
+#           run-id: ${{ github.event.workflow_run.id }} # Gets the run ID from the triggering workflow
+#           path: ./downloaded-artifact-path/
+      # ... (Deployment steps)
+
+
+
+# # .github/workflows/liquibase-ci-cd.yml
+# name: Liquibase CI/CD Pipeline
+
+# on:
+#   push:
+#     branches:
+#       - main
+
+# jobs:
+#   validate_and_build:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+#       # ... (Other build/validation steps)
+#       - name: Upload changelog files as a deployment bundle artifact
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: liquibase-deployment-bundle
+#           path: ./liquibase_files/
+
+#   deploy_to_dev:
+#     needs: validate_and_build # This dependency is crucial
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Download changelog artifact
+#         uses: actions/download-artifact@v4
+#         with:
+#           name: liquibase-deployment-bundle
+#           path: ./downloaded-artifact-path/
+#       # ... (Deployment steps using the artifact)
